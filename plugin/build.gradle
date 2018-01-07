@@ -1,0 +1,34 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'groovy'
+
+compileGroovy {
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+    options.encoding = "UTF-8"
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    compile 'com.android.tools.build:gradle:2.2.2'
+}
+
+// 本地调试
+group = 'com.xixi.plugin'
+version = '1.0.1'
+
+uploadArchives {
+    version = version + '-SNAPSHOT'//if you are testing the demo I provide locally, you can uncomment this.
+    repositories {
+        mavenDeployer {
+//            repository(url: uri('../repo'))
+            snapshotRepository(url: uri('../snapshotRepo'))
+        }
+    }
+}
