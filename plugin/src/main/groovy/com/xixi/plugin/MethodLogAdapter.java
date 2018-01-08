@@ -22,6 +22,7 @@ public class MethodLogAdapter extends MethodVisitor {
      * @return class path
      */
     public static String className2Path(String classname) {
+//        Logger.info("====className2Path ${classname}====");
         return classname.replace('.', '/');
     }
 

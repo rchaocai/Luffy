@@ -3,6 +3,7 @@ package com.xixi.plugin
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
+import com.xixi.plugin.tracking.AutoTransform
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -17,9 +18,9 @@ class BuildFileMovePlugin implements Plugin<Project> {
             if(Class.forName("com.android.build.gradle.BaseExtension")){
                 BaseExtension android = project.extensions.getByType(BaseExtension)
                 if (android instanceof LibraryExtension) {
-                    DataHelper.ext.projectType = DataHelper.TYPE_LIB;
+                    DataHelper.ext.projectType = DataHelper.TYPE_LIB
                 } else if (android instanceof AppExtension) {
-                    DataHelper.ext.projectType = DataHelper.TYPE_APP;
+                    DataHelper.ext.projectType = DataHelper.TYPE_APP
                 } else {
                     DataHelper.ext.projectType = -1
                 }
@@ -45,7 +46,7 @@ class BuildFileMovePlugin implements Plugin<Project> {
     }
 
     def static registerTransform(BaseExtension android) {
-        InjectTransform transform = new InjectTransform();
+        AutoTransform transform = new AutoTransform()
         android.registerTransform(transform)
     }
 

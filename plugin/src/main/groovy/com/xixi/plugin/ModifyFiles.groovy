@@ -110,7 +110,7 @@ public class ModifyFiles {
             }
             jarOutputStream.closeEntry();
         }
-//            Log.info("${hexName} is modified");
+//            Logger.info("${hexName} is modified");
         jarOutputStream.close();
         file.close();
         return outputJar;

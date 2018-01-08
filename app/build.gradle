@@ -1,16 +1,19 @@
 import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.MethodVisitor
+import com.xixi.plugin.MethodLogAdapter
+import org.objectweb.asm.Opcodes
 
 apply plugin: 'com.android.application'
 apply plugin: 'apk.move.plugin'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.mmc.sample"
         minSdkVersion 10
-        targetSdkVersion 24
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -26,7 +29,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:23.0.0'
     compile files('libs/MiPush_SDK_Client_3_2_2.jar')
 }
 
@@ -34,12 +37,20 @@ xiaoqingwa{
     name = "小傻逼"
     //this is the most important part
     modifyMatchMaps = [
-            'com.xiaomi.mipush.sdk.u':[
-                    ['methodName': 'a',
-                     'methodDesc': '(Lorg/apache/thrift/a;Lcom/xiaomi/xmpush/thrift/a;ZLcom/xiaomi/xmpush/thrift/r;)V',
-                     'adapter': {
-                         ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
-                         return null;
+            '*MainActivity': [
+                    ['methodName': 'on**', 'methodDesc': null, 'adapter': {
+                        ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
+                            MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
+                            MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
+                                @Override
+                                void visitCode() {
+                                    super.visitCode();
+                                    methodVisitor.visitLdcInsn(desc);
+                                    methodVisitor.visitLdcInsn(name);
+                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "com/xishuang/plugintest/MainActivity", "hookXM", "(Ljava/lang/Object;Ljava/lang/Object;)V");
+                                }
+                            }
+                            return adapter;
                     }]
             ]
     ]

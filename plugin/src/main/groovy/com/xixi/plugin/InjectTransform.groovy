@@ -55,7 +55,7 @@ public class InjectTransform extends Transform {
             boolean isIncremental) throws IOException, TransformException, InterruptedException {
         Log.info "==============hiBeaver ${Util.getHiBeaver().name + ' '}transform enter=============="
 //        String flavorAndBuildType = context.name.split("For")[1]
-//        Log.info("flavorAndBuildType ${flavorAndBuildType}")
+//        Logger.info("flavorAndBuildType ${flavorAndBuildType}")
         Map<String, Object> modifyMatchMaps = Util.getHiBeaver().modifyMatchMaps;
         Log.info "==============hiBeaver ${modifyMatchMaps.size() + ' '}transform enter=============="
 
@@ -218,7 +218,7 @@ public class InjectTransform extends Transform {
                     String className
                     if (entryName.endsWith(".class")) {
                         className = entryName.replace("/", ".").replace(".class", "")
-//                        Log.info("className  ${className}")
+//                        Logger.info("className  ${className}")
                         if (Util.shouldModifyClass(className) != null) {
                             Log.info("shouldModifyClass  ${className}")
                             modified = true;

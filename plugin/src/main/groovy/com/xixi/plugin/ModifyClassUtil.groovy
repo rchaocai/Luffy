@@ -15,7 +15,7 @@ public class ModifyClassUtil {
     static byte[] modifyClasses(String className, byte[] srcByteCode, Object container) {
         List<Map<String, Object>> methodMatchMaps = getList(container);
         byte[] classBytesCode = null;
-//        Log.info("====start modifying ${methodMatchMaps.size()}====");
+//        Logger.info("====start modifying ${methodMatchMaps.size()}====");
 //        modifyClass(srcByteCode, methodMatchMaps);
         if (methodMatchMaps) {
             try {
@@ -70,6 +70,7 @@ public class ModifyClassUtil {
 //        private String className;
         private List<Map<String, Object>> methodMatchMaps;
         public boolean onlyVisit = false;
+        private boolean isLocationListener = false;
 
         public MethodFilterClassVisitor(
                 final ClassVisitor cv, List<Map<String, Object>> methodMatchMaps) {
@@ -125,6 +126,14 @@ public class ModifyClassUtil {
         public void visit(int version, int access, String name,
                           String signature, String superName, String[] interfaces) {
             Log.logEach('* visit *', Log.accCode2String(access), name, signature, superName, interfaces);
+            interfaces.each {
+                String inteface ->
+                    Log.info("====finish modifying ${inteface}====");
+
+                    if (inteface.contains("LocationListener")){
+                        isLocationListener = true;
+                    }
+            }
             super.visit(version, access, name, signature, superName, interfaces);
         }
 
@@ -133,6 +142,7 @@ public class ModifyClassUtil {
                                          String desc, String signature, String[] exceptions) {
             MethodVisitor myMv = null;
             Log.info("====start onlyVisit1 ${onlyVisit.toString()}====");
+            Log.info("====start isLocationListener ${isLocationListener.toString()}====");
             if (!onlyVisit) {
                 Log.logEach("* visitMethod *", Log.accCode2String(access), name, desc, signature, exceptions);
             }
@@ -147,12 +157,11 @@ public class ModifyClassUtil {
                             //methodDesc 不设置，为空，即代表对methodDesc不限制
                             if (methodDesc != null) {
                                 if (Util.isPatternMatch(methodDesc, metMatchType, desc)) {
-                                    Log.info("====start onlyVisit2 ${onlyVisit.toString()}====");
                                     if (onlyVisit) {
                                         myMv = new MethodLogAdapter(cv.visitMethod(access, name, desc, signature, exceptions));
                                     } else {
                                         try {
-                                            myMv = visit(cv, access, name, desc, signature, exceptions);
+                                            myMv = visit2(cv, access, name, desc, signature, exceptions);
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                             myMv = null
@@ -161,7 +170,7 @@ public class ModifyClassUtil {
                                 }
                             } else {
                                 try {
-                                    myMv = visit(cv, access, name, desc, signature, exceptions);
+                                    myMv = visit2(cv, access, name, desc, signature, exceptions);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     myMv = null
@@ -171,7 +180,6 @@ public class ModifyClassUtil {
                     }
             }
             if (myMv != null) {
-                Log.info("====start onlyVisit3 ${onlyVisit.toString()}====");
                 if (onlyVisit) {
                     Log.logEach("* revisitMethod *", Log.accCode2String(access), name, desc, signature);
                 }
