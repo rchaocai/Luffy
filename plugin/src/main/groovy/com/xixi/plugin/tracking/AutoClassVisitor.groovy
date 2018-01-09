@@ -106,15 +106,46 @@ public class AutoClassVisitor extends ClassVisitor {
                 adapter = new AutoMethodVisitor(methodVisitor, access, name, desc)
                 return adapter
             }
+//            adapter = new AutoMethodVisitor(methodVisitor, access, name, desc) {
+//                @Override
+//                protected void onMethodEnter() {
+//                    super.onMethodEnter()
+//                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "com/xishuang/plugintest/MainActivity", "hookXM", "()V")
+//                            mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+//                            mv.visitLdcInsn("========start=========")
+//                            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
+//                            mv.visitLdcInsn(name);
+//                            mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
+//                            mv.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setStartTime", "(Ljava/lang/String;J)V", false)
+//                }
+//
+//                @Override
+//                protected void onMethodExit(int opcode) {
+//                    super.onMethodExit(opcode)
+//                            mv.visitLdcInsn(name)
+//                            mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
+//                            mv.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setEndTime", "(Ljava/lang/String;J)V", false)
+//
+//                            mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+//                            mv.visitLdcInsn(name)
+//                            mv.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "getCostTime", "(Ljava/lang/String;)Ljava/lang/String;", false)
+//                            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
+//
+//                            mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+//                            mv.visitLdcInsn("========end=========")
+//                            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
+//                }
+//            }
             //应用里头设置的
             Closure vivi = Controller.getParams().matchData.get("MethodVisitor")
-            if (closure != null) {
-                try {
-                    adapter = vivi(cv, access, name, desc, signature, exceptions)
-                } catch (Exception e) {
-                    e.printStackTrace()
-                    adapter = null
-                }
+            if (vivi != null) {
+                adapter = vivi(methodVisitor, access, name, desc)
+//                try {
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace()
+//                    adapter = null
+//                }
             }
         }
         if (adapter != null) {

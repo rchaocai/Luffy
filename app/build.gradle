@@ -1,8 +1,3 @@
-import org.objectweb.asm.ClassVisitor
-import org.objectweb.asm.MethodVisitor
-import com.xixi.plugin.tracking.AutoMethodVisitor
-import org.objectweb.asm.Opcodes
-
 apply plugin: 'com.android.application'
 apply plugin: 'apk.move.plugin'
 
@@ -30,9 +25,15 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.0'
-    compile files('libs/MiPush_SDK_Client_3_2_2.jar')
+//    compile files('libs/MiPush_SDK_Client_3_2_2.jar')
     compile project(':annotation')
 }
+
+
+
+import com.xixi.plugin.tracking.AutoMethodVisitor
+import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
 
 xiaoqingwa{
     name = "小傻逼"
@@ -42,9 +43,8 @@ xiaoqingwa{
                     ['ClassName': 'MainActivity', 'InnerClassName': null, 'InterfaceName': 'OnClickListener', 'MethodName':'countTime']
             ],
             'MethodVisitor':{
-                ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
-                    MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions)
-                    MethodVisitor adapter = new AutoMethodVisitor(methodVisitor) {
+                MethodVisitor methodVisitor, int access, String name, String desc ->
+                    MethodVisitor adapter = new AutoMethodVisitor(methodVisitor, access, name, desc) {
                         @Override
                         protected void onMethodEnter() {
                             super.onMethodEnter()
