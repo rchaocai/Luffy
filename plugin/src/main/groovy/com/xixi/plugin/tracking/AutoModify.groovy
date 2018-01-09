@@ -1,6 +1,7 @@
 package com.xixi.plugin.tracking
 
 import com.xixi.plugin.*
+import com.xixi.plugin.bean.TextUtil
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.IOUtils
 import org.objectweb.asm.ClassReader
@@ -21,8 +22,8 @@ import java.util.zip.ZipOutputStream
  */
 public class AutoModify {
 
-    static File modifyJar(File jarFile, Map<String, Object> modifyMatchMaps, File tempDir, boolean nameHex) {
-        Log.info("====start modifyJar ====");
+    static File modifyJar(File jarFile, File tempDir, boolean nameHex) {
+        Log.info("====start modifyJar ====")
         /**
          * 读取原jar
          */
@@ -52,7 +53,6 @@ public class AutoModify {
             byte[] sourceClassBytes = IOUtils.toByteArray(inputStream)
             if (entryName.endsWith(".class")) {
                 className = entryName.replace("/", ".").replace(".class", "")
-                String key = Util.shouldModifyClass(className)
                 modifiedClassBytes = modifyClasses(className, sourceClassBytes)
             }
             if (modifiedClassBytes == null) {
@@ -68,7 +68,9 @@ public class AutoModify {
     }
 
     public static byte[] modifyClasses(String className, byte[] srcByteCode) {
-        if (!className.contains("MainActivity")) {
+        String filter = Controller.getClassName()
+        //简单过滤
+        if (!TextUtil.isEmpty(filter) && !className.contains(filter)) {
             return srcByteCode
         }
         byte[] classBytesCode = null
@@ -92,7 +94,7 @@ public class AutoModify {
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS)
         ClassVisitor adapter = new AutoClassVisitor(classWriter)
         ClassReader cr = new ClassReader(srcClass)
-        cr.accept(adapter, 0)
+        cr.accept(adapter, ClassReader.EXPAND_FRAMES)
         return classWriter.toByteArray()
     }
 
@@ -101,6 +103,6 @@ public class AutoModify {
         ClassVisitor visitor = new AutoClassVisitor(classWriter)
         visitor.onlyVisit = true
         ClassReader cr = new ClassReader(srcClass)
-        cr.accept(visitor, 0)
+        cr.accept(visitor, ClassReader.EXPAND_FRAMES)
     }
 }

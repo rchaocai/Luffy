@@ -1,6 +1,6 @@
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
-import com.xixi.plugin.MethodLogAdapter
+import com.xixi.plugin.tracking.AutoMethodVisitor
 import org.objectweb.asm.Opcodes
 
 apply plugin: 'com.android.application'
@@ -31,27 +31,50 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.0'
     compile files('libs/MiPush_SDK_Client_3_2_2.jar')
+    compile project(':annotation')
 }
 
 xiaoqingwa{
     name = "小傻逼"
     //this is the most important part
-    modifyMatchMaps = [
-            '*MainActivity': [
-                    ['methodName': 'on**', 'methodDesc': null, 'adapter': {
-                        ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
-                            MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
-                            MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
-                                @Override
-                                void visitCode() {
-                                    super.visitCode();
-                                    methodVisitor.visitLdcInsn(desc);
-                                    methodVisitor.visitLdcInsn(name);
-                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "com/xishuang/plugintest/MainActivity", "hookXM", "(Ljava/lang/Object;Ljava/lang/Object;)V");
-                                }
-                            }
-                            return adapter;
-                    }]
-            ]
+    matchData = [
+            'ClassFilter': [
+                    ['ClassName': 'MainActivity', 'InnerClassName': null, 'InterfaceName': 'OnClickListener', 'MethodName':'countTime']
+            ],
+            'MethodVisitor':{
+                ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
+                    MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions)
+                    MethodVisitor adapter = new AutoMethodVisitor(methodVisitor) {
+                        @Override
+                        protected void onMethodEnter() {
+                            super.onMethodEnter()
+                            methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "com/xishuang/plugintest/MainActivity", "hookXM", "()V")
+                            mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+                            mv.visitLdcInsn("========start=========")
+                            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
+                            mv.visitLdcInsn(name);
+                            mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
+                            mv.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setStartTime", "(Ljava/lang/String;J)V", false)
+                        }
+
+                        @Override
+                        protected void onMethodExit(int opcode) {
+                            super.onMethodExit(opcode)
+                            mv.visitLdcInsn(name)
+                            mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
+                            mv.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setEndTime", "(Ljava/lang/String;J)V", false)
+
+                            mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+                            mv.visitLdcInsn(name)
+                            mv.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "getCostTime", "(Ljava/lang/String;)Ljava/lang/String;", false)
+                            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
+
+                            mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+                            mv.visitLdcInsn("========end=========")
+                            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
+                        }
+                    }
+                    return adapter
+            }
     ]
 }

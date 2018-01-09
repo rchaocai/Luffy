@@ -1,17 +1,19 @@
 package com.xixi.plugin.tracking
 
 import com.xixi.plugin.Log
+import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.Attribute
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
+import org.objectweb.asm.commons.AdviceAdapter
 
-public class AutoMethodVisitor extends MethodVisitor {
+public class AutoMethodVisitor extends AdviceAdapter {
 
     MethodVisitor methodVisitor;
 
-    public AutoMethodVisitor(MethodVisitor mv) {
-        super(Opcodes.ASM4, mv)
+    public AutoMethodVisitor(MethodVisitor mv, int access, String name, String desc) {
+        super(Opcodes.ASM4, mv, access, name, desc)
         methodVisitor = mv
     }
 
@@ -38,12 +40,12 @@ public class AutoMethodVisitor extends MethodVisitor {
         Logger.logForEach("visitFieldInsn", Log.getOpName(opcode), owner, name, desc)
         super.visitFieldInsn(opcode, owner, name, desc)
     }
-
-    @Override
-    public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
-        Logger.logForEach("visitFrame", type, local, nLocal, nStack, stack)
-        super.visitFrame(type, nLocal, local, nStack, stack)
-    }
+//
+//    @Override
+//    public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
+//        Logger.logForEach("visitFrame", type, local, nLocal, nStack, stack)
+//        super.visitFrame(type, nLocal, local, nStack, stack)
+//    }
 
     @Override
     public void visitLabel(Label label) {
@@ -53,7 +55,7 @@ public class AutoMethodVisitor extends MethodVisitor {
 
     @Override
     public void visitLineNumber(int line, Label label) {
-        Logger.logForEach("visitLineNumber", line, label)
+//        Logger.logForEach("visitLineNumber", line, label)
         super.visitLineNumber(line, label)
     }
 
@@ -89,7 +91,7 @@ public class AutoMethodVisitor extends MethodVisitor {
 
     @Override
     public void visitLdcInsn(Object o) {
-        Logger.logForEach("visitLdcInsn", o)
+//        Logger.logForEach("visitLdcInsn", o)
         super.visitLdcInsn(o)
     }
 
@@ -139,5 +141,23 @@ public class AutoMethodVisitor extends MethodVisitor {
     public void visitInsn(int opcode) {
         Logger.logForEach("visitInsn", Log.getOpName(opcode))
         super.visitInsn(opcode)
+    }
+
+    @Override
+    AnnotationVisitor visitAnnotation(String s, boolean b) {
+        Logger.logForEach("visitAnnotation", s)
+        return super.visitAnnotation(s, b)
+    }
+
+    @Override
+    protected void onMethodEnter() {
+        Logger.logForEach("onMethodEnter")
+        super.onMethodEnter()
+    }
+
+    @Override
+    protected void onMethodExit(int opcode) {
+        Logger.logForEach("visitInsn", Log.getOpName(opcode))
+        super.onMethodExit(opcode)
     }
 }

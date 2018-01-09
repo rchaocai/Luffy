@@ -42,9 +42,6 @@ public class AutoTransform extends Transform {
             @NonNull Collection<TransformInput> referencedInputs,
             @Nullable TransformOutputProvider outputProvider,
             boolean isIncremental) throws IOException, TransformException, InterruptedException {
-        Map<String, Object> modifyMatchMaps = Util.getHiBeaver().modifyMatchMaps
-
-        Util.initTargetClasses(modifyMatchMaps)
 
         if (Logger.isDebug()) {
             printlnJarAndDir(inputs)
@@ -122,8 +119,7 @@ public class AutoTransform extends Transform {
      */
     private static File modifyJarFile(File jarFile, File tempDir) {
         if (jarFile) {
-            Map<String, Object> modifyMatchMaps = Util.getHiBeaver().modifyMatchMaps
-            return AutoModify.modifyJar(jarFile, modifyMatchMaps, tempDir, true)
+            return AutoModify.modifyJar(jarFile, tempDir, true)
 
         }
         return null

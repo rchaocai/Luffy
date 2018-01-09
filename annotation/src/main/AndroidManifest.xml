@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xishuang.annotation"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <uses-sdk tools:overrideLibrary="com.xishuang.annotation"/>
+</manifest>
