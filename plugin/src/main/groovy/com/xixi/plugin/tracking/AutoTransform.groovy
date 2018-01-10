@@ -72,8 +72,6 @@ public class AutoTransform extends Transform {
                 Logger.info("||-->结束遍历特定jar ${dest.absolutePath}")
                 if (modifiedJar == null) {
                     modifiedJar = jarInput.file
-                } else {
-                    saveModifiedJarForCheck(modifiedJar)
                 }
                 FileUtils.copyFile(modifiedJar, dest)
             }
@@ -103,7 +101,6 @@ public class AutoTransform extends Transform {
                                 target.delete()
                             }
                             FileUtils.copyFile(en.getValue(), target)
-                            saveModifiedJarForCheck(en.getValue())
                             en.getValue().delete()
                     }
                 }
@@ -116,16 +113,6 @@ public class AutoTransform extends Transform {
         Logger.info("||=======================================================================================================")
         Logger.info("||                                       计时结束:费时${cost}秒                                           ")
         Logger.info("||=======================================================================================================")
-    }
-
-
-    private static void saveModifiedJarForCheck(File optJar) {
-        File dir = DataHelper.ext.hiBeaverDir
-        File checkJarFile = new File(dir, optJar.getName())
-        if (checkJarFile.exists()) {
-            checkJarFile.delete()
-        }
-        FileUtils.copyFile(optJar, checkJarFile)
     }
 
     /**

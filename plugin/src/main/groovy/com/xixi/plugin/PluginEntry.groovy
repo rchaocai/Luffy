@@ -8,7 +8,7 @@ import com.xixi.plugin.tracking.AutoTransform
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class BuildFileMovePlugin implements Plugin<Project> {
+class PluginEntry implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
@@ -21,8 +21,6 @@ class BuildFileMovePlugin implements Plugin<Project> {
         def android = project.extensions.getByType(AppExtension)
         registerTransform(android)
 
-        initDir(project)
-
         project.afterEvaluate {
             println project.xiaoqingwa.name
             //初始化数据
@@ -33,22 +31,6 @@ class BuildFileMovePlugin implements Plugin<Project> {
     def static registerTransform(BaseExtension android) {
         AutoTransform transform = new AutoTransform()
         android.registerTransform(transform)
-    }
-
-    static void initDir(Project project) {
-        if (!project.buildDir.exists()) {
-            project.buildDir.mkdirs()
-        }
-        File hiBeaverDir = new File(project.buildDir, "HiBeaver")
-        if (!hiBeaverDir.exists()) {
-            hiBeaverDir.mkdir()
-        }
-        File tempDir = new File(hiBeaverDir, "temp")
-        if (!tempDir.exists()) {
-            tempDir.mkdir()
-        }
-        DataHelper.ext.hiBeaverDir = hiBeaverDir
-        DataHelper.ext.hiBeaverTempDir = tempDir
     }
 
     static void initData() {
