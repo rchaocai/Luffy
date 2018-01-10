@@ -49,12 +49,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
     }
 
-    public static void hookXM() {
+    public static void notifyInsert() {
         Toast.makeText(context, "哈哈", Toast.LENGTH_SHORT).show();
-        Log.i("hookXM", "");
-        Log.i("hookXM", "");
+        Log.d("notifyInsert", "");
     }
 
+    @AutoCount
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.button) {

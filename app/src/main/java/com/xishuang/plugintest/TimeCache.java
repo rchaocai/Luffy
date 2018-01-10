@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by xishuang on 2018/1/9.
+ * Author:xishuang
+ * Date:2018.01.10
+ * Des:计时类，编译器加入指定方法中
  */
-
 public class TimeCache {
     public static Map<String, Long> sStartTime = new HashMap<>();
     public static Map<String, Long> sEndTime = new HashMap<>();

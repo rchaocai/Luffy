@@ -14,7 +14,6 @@ class BuildFileMovePlugin implements Plugin<Project> {
     void apply(Project project) {
         println ":applied XX哈哈"
         project.extensions.create('xiaoqingwa', AppSettingParams)
-        Util.setProject(project)
         Controller.setProject(project)
 
 
@@ -26,7 +25,6 @@ class BuildFileMovePlugin implements Plugin<Project> {
 
         project.afterEvaluate {
             println project.xiaoqingwa.name
-            Log.setQuiet(false)
             //初始化数据
             initData()
         }
@@ -55,22 +53,29 @@ class BuildFileMovePlugin implements Plugin<Project> {
 
     static void initData() {
         Map<String, Object> matchData = Controller.getParams().matchData
+
         List<Map<String, Object>> paramsList = matchData.get("ClassFilter")
         AutoClassFilter classFilter = new AutoClassFilter()
-
         paramsList.each {
             Map<String, Object> map ->
                 String className = map.get("ClassName")
                 String innerClassName = map.get("InnerClassName")
                 String interfaceName = map.get("InterfaceName")
                 String methodName = map.get("MethodName")
+                String superName = map.get("SuperName")
                 classFilter.setClassName(className)
                 classFilter.setInnerClassName(interfaceName)
                 classFilter.setInterfaceName(interfaceName)
                 classFilter.setMethodName(methodName)
+                classFilter.setSuperName(superName)
                 Controller.setClassFilter(classFilter)
-                println ":applied XX哈哈"
-                println className+innerClassName+interfaceName+methodName
+                println '应用传递过来的数据' + className+innerClassName+interfaceName+methodName
+        }
+        //设置是否使用注解查找相关方法，是的话把指定过来条件去掉
+        boolean isAnotation = matchData.get("isAnotation")
+        Controller.setIsUseAnotation(isAnotation)
+        if (isAnotation) {
+            Controller.setClassFilter(null)
         }
 
         Closure methodVistor = matchData.get("MethodVisitor")

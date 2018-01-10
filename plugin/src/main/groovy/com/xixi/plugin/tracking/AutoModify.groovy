@@ -1,7 +1,5 @@
 package com.xixi.plugin.tracking
 
-import com.xixi.plugin.*
-import com.xixi.plugin.bean.TextUtil
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.IOUtils
 import org.objectweb.asm.ClassReader
@@ -12,8 +10,6 @@ import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
-import java.util.zip.ZipOutputStream
 
 /**
  * Author:xishuang
@@ -23,7 +19,6 @@ import java.util.zip.ZipOutputStream
 public class AutoModify {
 
     static File modifyJar(File jarFile, File tempDir, boolean nameHex) {
-        Log.info("====start modifyJar ====")
         /**
          * 读取原jar
          */
@@ -34,7 +29,6 @@ public class AutoModify {
             hexName = DigestUtils.md5Hex(jarFile.absolutePath).substring(0, 8)
         }
         def outputJar = new File(tempDir, hexName + jarFile.name)
-        Log.info("====start modifyJar${outputJar.absolutePath} ====")
         JarOutputStream jarOutputStream = new JarOutputStream(new FileOutputStream(outputJar))
         Enumeration enumeration = file.entries()
 
@@ -67,19 +61,14 @@ public class AutoModify {
         return outputJar
     }
 
-    public static byte[] modifyClasses(String className, byte[] srcByteCode) {
-        String filter = Controller.getClassName()
-        //简单过滤
-        if (!TextUtil.isEmpty(filter) && !className.contains(filter)) {
-            return srcByteCode
-        }
+    static byte[] modifyClasses(String className, byte[] srcByteCode) {
         byte[] classBytesCode = null
         try {
-            Log.info("====start modifying ${className}====")
             classBytesCode = modifyClass(srcByteCode)
-            Log.info("====revisit modified ${className}====")
-            onlyVisitClassMethod(classBytesCode)
-            Log.info("====finish modifying ${className}====")
+            //调试模式下再遍历一遍看修改的方法情况
+            if (Logger.isDebug()) {
+                seeModifyMethod(classBytesCode)
+            }
             return classBytesCode
         } catch (Exception e) {
             e.printStackTrace()
@@ -89,7 +78,9 @@ public class AutoModify {
         }
         return classBytesCode
     }
-
+    /**
+     * 真正修改类中方法字节码
+     */
     private static byte[] modifyClass(byte[] srcClass) throws IOException {
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS)
         ClassVisitor adapter = new AutoClassVisitor(classWriter)
@@ -97,11 +88,13 @@ public class AutoModify {
         cr.accept(adapter, ClassReader.EXPAND_FRAMES)
         return classWriter.toByteArray()
     }
-
-    private static void onlyVisitClassMethod(byte[] srcClass) throws IOException {
+    /**
+     * 查看修改字节码后的方法
+     */
+    private static void seeModifyMethod(byte[] srcClass) throws IOException {
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS)
         ClassVisitor visitor = new AutoClassVisitor(classWriter)
-        visitor.onlyVisit = true
+        visitor.seeModifyMethod = true
         ClassReader cr = new ClassReader(srcClass)
         cr.accept(visitor, ClassReader.EXPAND_FRAMES)
     }

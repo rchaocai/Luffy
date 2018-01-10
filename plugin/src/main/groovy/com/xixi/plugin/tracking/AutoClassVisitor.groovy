@@ -1,92 +1,58 @@
 package com.xixi.plugin.tracking
 
 import com.xixi.plugin.Controller
-import com.xixi.plugin.Log
+
 import com.xixi.plugin.bean.TextUtil
-import org.objectweb.asm.AnnotationVisitor
-import org.objectweb.asm.Attribute
 import org.objectweb.asm.ClassVisitor
-import org.objectweb.asm.FieldVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
 
 public class AutoClassVisitor extends ClassVisitor {
-    public boolean onlyVisit = false
-    private boolean isLocationListener = false
+    /**
+     * 是否查看修改后的方法
+     */
+    public boolean seeModifyMethod = false
+    /**
+     * 是否满足条件，满足条件的类才会修改中指定的方法
+     */
+    private boolean isMeetClassCondition = false
+    /**
+     * 是否需要通过注解执行对应的方法
+     */
+    private boolean isNeedAnnotation = Controller.isUseAnotation()
 
     AutoClassVisitor(final ClassVisitor cv) {
         super(Opcodes.ASM4, cv)
     }
 
     @Override
-    void visitEnd() {
-//        if (isLocationListener) {
-        Logger.logForEach('* visitEnd *')
-//        }
-        super.visitEnd()
-    }
-
-    @Override
-    void visitAttribute(Attribute attribute) {
-//        if (isLocationListener) {
-        Logger.logForEach('* visitAttribute *', attribute, attribute.type, attribute.metaClass, attribute.metaPropertyValues, attribute.properties)
-//        }
-        super.visitAttribute(attribute)
-    }
-
-    @Override
-    AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-//        if (isLocationListener) {
-        Logger.logForEach('* visitAnnotation *', desc, visible)
-//        }
-        return super.visitAnnotation(desc, visible)
-    }
-
-    @Override
-    void visitInnerClass(String name, String outerName, String innerName, int access) {
-        // 内部类
-//        if (name.contains("OnClickListener")) {
-        isLocationListener = true
-        Logger.logForEach('* visitInnerClass *', name, outerName, innerName, Log.accCode2String(access))
-//        }
-        super.visitInnerClass(name, outerName, innerName, access)
-    }
-
-    @Override
-    void visitOuterClass(String owner, String name, String desc) {
-//        if (isLocationListener) {
-        Logger.logForEach('* visitOuterClass *', owner, name, desc);
-//        }
-        super.visitOuterClass(owner, name, desc)
-    }
-
-    @Override
-    void visitSource(String source, String debug) {
-//        if (isLocationListener) {
-        Logger.logForEach('* visitSource *', source, debug)
-//        }
-        super.visitSource(source, debug)
-    }
-
-    @Override
-    FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-//        if (isLocationListener) {
-        Logger.logForEach('* visitField *', Log.accCode2String(access), name, desc, signature, value)
-//        }
-        return super.visitField(access, name, desc, signature, value)
-    }
-
-    @Override
     void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        String interfaceName = Controller.getInterfaceName()
-        if (!TextUtil.isEmpty(interfaceName)) {
+        String appInterfaceName = Controller.getInterfaceName()
+        String appClassName = Controller.getClassName()
+        String appSuperName = Controller.getSuperName()
+        // 是否满足实现的接口
+        if (!TextUtil.isEmpty(appInterfaceName)) {
             interfaces.each {
                 String inteface ->
-                    if (inteface.contains(interfaceName)) {
-                        Logger.logForEach('* visit *', Log.accCode2String(access), name, signature, superName, interfaces);
-                        isLocationListener = true
+                    if (inteface.contains(appInterfaceName)) {
+                        isMeetClassCondition = true
                     }
+            }
+        }
+        // 是否满足指定类
+        if (!TextUtil.isEmpty(appClassName) && name.contains(appClassName)) {
+            isMeetClassCondition = true
+        }
+        // 是否满足指定的父类
+        if (!TextUtil.isEmpty(appSuperName) && superName.contains(appSuperName)) {
+            isMeetClassCondition = true
+        }
+        // 打印调试信息
+        if (isMeetClassCondition){
+            Logger.info('||------------------------------开始遍历类 Start--------------------------------------')
+            if (!seeModifyMethod) {
+                Logger.logForEach('||* visitStart *', Logger.accCode2String(access), name, signature, superName, interfaces)
             }
         }
 
@@ -94,63 +60,69 @@ public class AutoClassVisitor extends ClassVisitor {
     }
 
     @Override
+    void visitInnerClass(String name, String outerName, String innerName, int access) {
+        String appInnerClassName = Controller.getInnerClassName()
+        // 内部类
+        if (!isMeetClassCondition && !TextUtil.isEmpty(appInnerClassName) && name.contains(appInnerClassName)) {
+            isMeetClassCondition = true
+            Logger.info('||------------------------------开始遍历类 Start--------------------------------------')
+        }
+        if(isMeetClassCondition) {
+            if (!seeModifyMethod) {
+                Logger.logForEach('||* visitInnerClass *', name, outerName, innerName, Logger.accCode2String(access))
+            }
+        }
+        super.visitInnerClass(name, outerName, innerName, access)
+    }
+
+    @Override
     MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+
         MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions)
         MethodVisitor adapter = null
-        String methodName = Controller.getMethodName()
-        //字节码操作
-        if (isLocationListener && name == "countTime") {
-            Logger.logForEach('* visitMethod *', Log.accCode2String(access), name, desc, signature, exceptions)
-            //调试插入字节码之后
-            if (onlyVisit) {
-                adapter = new AutoMethodVisitor(methodVisitor, access, name, desc)
-                return adapter
-            }
-//            adapter = new AutoMethodVisitor(methodVisitor, access, name, desc) {
-//                @Override
-//                protected void onMethodEnter() {
-//                    super.onMethodEnter()
-//                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "com/xishuang/plugintest/MainActivity", "hookXM", "()V")
-//                            mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-//                            mv.visitLdcInsn("========start=========")
-//                            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
-//                            mv.visitLdcInsn(name);
-//                            mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
-//                            mv.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setStartTime", "(Ljava/lang/String;J)V", false)
-//                }
-//
-//                @Override
-//                protected void onMethodExit(int opcode) {
-//                    super.onMethodExit(opcode)
-//                            mv.visitLdcInsn(name)
-//                            mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
-//                            mv.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setEndTime", "(Ljava/lang/String;J)V", false)
-//
-//                            mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-//                            mv.visitLdcInsn(name)
-//                            mv.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "getCostTime", "(Ljava/lang/String;)Ljava/lang/String;", false)
-//                            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
-//
-//                            mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-//                            mv.visitLdcInsn("========end=========")
-//                            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
-//                }
-//            }
-            //应用里头设置的
-            Closure vivi = Controller.getParams().matchData.get("MethodVisitor")
+        String appMethodName = Controller.getMethodName()
+
+        if (seeModifyMethod && !isNeedAnnotation && name.contains(appMethodName)) { //查看插入字节码之后信息，注解查找就不运行了，每个方法都会遍历到，日志太多
+            Logger.info("||---------------------查看修改后方法${name}-----------------------------")
+            Logger.logForEach('||* visitMethod *', Logger.accCode2String(access), name, desc, signature, exceptions)
+            adapter = new AutoMethodVisitor(methodVisitor, access, name, desc)
+        } else if (TextUtil.isEmpty(appMethodName)) { //不指定方法名(方法名为空)，根据用户自己传过来的注解修改方法
+            Closure vivi = Controller.getAppMethodVistor()
             if (vivi != null) {
-                adapter = vivi(methodVisitor, access, name, desc)
-//                try {
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace()
-//                    adapter = null
-//                }
+                try {
+                    adapter = vivi(methodVisitor, access, name, desc)
+                } catch (Exception e) {
+                    e.printStackTrace()
+                    adapter = null
+                }
+            }
+        } else if ((isMeetClassCondition && name.contains(appMethodName))) { //指定方法名，根据满足的类条件和方法名
+            Logger.info("||-----------------开始修改方法${name}--------------------------")
+            Logger.logForEach('||* visitMethod *', Logger.accCode2String(access), name, desc, signature, exceptions)
+            Closure vivi = Controller.getAppMethodVistor()
+            if (vivi != null) {
+                try {
+                    adapter = vivi(methodVisitor, access, name, desc)
+                } catch (Exception e) {
+                    e.printStackTrace()
+                    adapter = null
+                }
             }
         }
         if (adapter != null) {
             return adapter
         }
         return methodVisitor
+    }
+
+    @Override
+    void visitEnd() {
+        if (isMeetClassCondition) {
+            if (!seeModifyMethod){
+                Logger.logForEach('||* visitEnd *')
+            }
+            Logger.info('||------------------------------结束遍历类 end--------------------------------------')
+        }
+        super.visitEnd()
     }
 }

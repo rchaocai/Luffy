@@ -5,6 +5,7 @@ import com.android.annotations.Nullable
 import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
 import com.xixi.plugin.*
+import com.xixi.plugin.bean.TextUtil
 import groovy.io.FileType
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
@@ -42,6 +43,11 @@ public class AutoTransform extends Transform {
             @NonNull Collection<TransformInput> referencedInputs,
             @Nullable TransformOutputProvider outputProvider,
             boolean isIncremental) throws IOException, TransformException, InterruptedException {
+        //开始计算消耗的时间
+        Logger.info("||=======================================================================================================")
+        Logger.info("||                                                 开始计时                                               ")
+        Logger.info("||=======================================================================================================")
+        def startTime = System.currentTimeMillis()
 
         if (Logger.isDebug()) {
             printlnJarAndDir(inputs)
@@ -61,8 +67,9 @@ public class AutoTransform extends Transform {
                 }
                 /** 获得输出文件*/
                 File dest = outputProvider.getContentLocation(destName + "_" + hexName, jarInput.contentTypes, jarInput.scopes, Format.JAR)
-                Logger.info("-->start jar ${dest.absolutePath}")
+                Logger.info("||-->开始遍历特定jar ${dest.absolutePath}")
                 def modifiedJar = modifyJarFile(jarInput.file, context.getTemporaryDir())
+                Logger.info("||-->结束遍历特定jar ${dest.absolutePath}")
                 if (modifiedJar == null) {
                     modifiedJar = jarInput.file
                 } else {
@@ -75,7 +82,7 @@ public class AutoTransform extends Transform {
              */
             input.directoryInputs.each { DirectoryInput directoryInput ->
                 File dest = outputProvider.getContentLocation(directoryInput.name, directoryInput.contentTypes, directoryInput.scopes, Format.DIRECTORY);
-                Logger.info("-->start dir  ${dest.absolutePath}")
+                Logger.info("||-->开始遍历特定目录  ${dest.absolutePath}")
                 File dir = directoryInput.file
                 if (dir) {
                     HashMap<String, File> modifyMap = new HashMap<>()
@@ -91,7 +98,7 @@ public class AutoTransform extends Transform {
                     modifyMap.entrySet().each {
                         Map.Entry<String, File> en ->
                             File target = new File(dest.absolutePath + en.getKey())
-                            Logger.info(target.getAbsolutePath())
+//                            Logger.info(target.getAbsolutePath())
                             if (target.exists()) {
                                 target.delete()
                             }
@@ -100,8 +107,15 @@ public class AutoTransform extends Transform {
                             en.getValue().delete()
                     }
                 }
+                Logger.info("||-->结束遍历特定目录  ${dest.absolutePath}")
             }
         }
+
+        //计算耗时
+        def cost = (System.currentTimeMillis() - startTime) / 1000
+        Logger.info("||=======================================================================================================")
+        Logger.info("||                                       计时结束:费时${cost}秒                                           ")
+        Logger.info("||=======================================================================================================")
     }
 
 
@@ -132,7 +146,7 @@ public class AutoTransform extends Transform {
     private static File modifyClassFile(File dir, File classFile, File tempDir) {
         File modified
         try {
-            String className = Util.path2Classname(classFile.absolutePath.replace(dir.absolutePath + File.separator, ""))
+            String className = TextUtil.path2ClassName(classFile.absolutePath.replace(dir.absolutePath + File.separator, ""))
             byte[] sourceClassBytes = IOUtils.toByteArray(new FileInputStream(classFile))
             byte[] modifiedClassBytes = AutoModify.modifyClasses(className, sourceClassBytes)
             if (modifiedClassBytes) {
@@ -163,15 +177,12 @@ public class AutoTransform extends Transform {
                 classPaths.add(directoryInput.file.absolutePath)
                 buildTypes = directoryInput.file.name
                 productFlavors = directoryInput.file.parentFile.name
-                Logger.info("--->项目class目录：${directoryInput.file.absolutePath}")
+                Logger.info("||项目class目录：${directoryInput.file.absolutePath}")
             }
             input.jarInputs.each { JarInput jarInput ->
                 classPaths.add(jarInput.file.absolutePath)
-                Logger.info("--->项目jar包：${jarInput.file.absolutePath}")
+                Logger.info("||项目jar包：${jarInput.file.absolutePath}")
             }
         }
-
-        def paths = [Util.getExtension().bootClasspath.get(0).absolutePath/*, injectClassPath*/]
-        paths.addAll(classPaths)
     }
 }

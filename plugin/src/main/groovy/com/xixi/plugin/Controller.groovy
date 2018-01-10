@@ -8,6 +8,7 @@ public class Controller {
     private static Project project
     private static AutoClassFilter autoClassFilter
     private static Closure methodVisitor
+    private static boolean isUseAnotation
 
     public static void setProject(Project project) {
         Controller.@project = project
@@ -17,51 +18,76 @@ public class Controller {
         return project
     }
 
-    static AppSettingParams getParams(){
+    static void setIsUseAnotation(boolean isAnotation) {
+        isUseAnotation = isAnotation
+    }
+
+    static boolean isUseAnotation(){
+        return isUseAnotation
+    }
+
+    static AppSettingParams getParams() {
         return project.xiaoqingwa
     }
 
-    static void setClassFilter(AutoClassFilter filter){
+    static void setClassFilter(AutoClassFilter filter) {
         autoClassFilter = filter
     }
 
-    static AutoClassFilter getClassFilter(){
+    static AutoClassFilter getClassFilter() {
         return autoClassFilter
     }
-
-    static String getClassName(){
+    /**
+     * 需要满足的类名
+     */
+    static String getClassName() {
         if (autoClassFilter == null) {
             return ""
         }
         return autoClassFilter.getClassName()
     }
-
-    static String getInnerClassName(){
+    /**
+     * 需要满足的内部类
+     */
+    static String getInnerClassName() {
         if (autoClassFilter == null) {
             return ""
         }
         return autoClassFilter.getInnerClassName()
     }
-
-    static String getInterfaceName(){
+    /**
+     * 需要满足的实现接口
+     */
+    static String getInterfaceName() {
         if (autoClassFilter == null) {
             return ""
         }
         return autoClassFilter.getInterfaceName()
     }
-
-    static String getMethodName(){
+    /**
+    * 需要满足的方法名
+    */
+    static String getMethodName() {
         if (autoClassFilter == null) {
             return ""
         }
         return autoClassFilter.getMethodName()
     }
-
-    static void setMethodVistor(Closure visitor){
-       methodVisitor = visitor
+    /**
+     * 需要满足继承的类
+     */
+    static String getSuperName() {
+        if (autoClassFilter == null) {
+            return ""
+        }
+        return autoClassFilter.getSuperName()
     }
 
-    static Closure getAppMethodVistor(){
+    static void setMethodVistor(Closure visitor) {
+        methodVisitor = visitor
+    }
+
+    static Closure getAppMethodVistor() {
         return methodVisitor
     }
 }
