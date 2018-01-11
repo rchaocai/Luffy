@@ -1,6 +1,5 @@
 # Luffy
 Android字节码插件，编译期间动态修改代码
-###5.1、插件配置
 先打包一下插件到本地仓库进行引用，在项目的根build.gradle加入插件的依赖
 
 ```
@@ -23,8 +22,8 @@ xiaoqingwa{
             'isAnotation': false,
             //方法的匹配，可以通过类名或者实现的接口名匹配
             'ClassFilter': [
-                    ['ClassName': null, 'InterfaceName':null,
-                     'MethodName':null, 'MethodDes':null]
+                    ['ClassName': 'com.xishuang.plugintest.MainActivity', 'InterfaceName': 'android/view/View$OnClickListener',
+                     'MethodName':'onClick', 'MethodDes':'(Landroid/view/View;)V']
             ],
             //插入的字节码，方法的执行顺序visitAnnotation->onMethodEnter->onMethodExit
             'MethodVisitor':{
@@ -35,12 +34,31 @@ xiaoqingwa{
                         protected void onMethodEnter() {
                             super.onMethodEnter()
                             //使用注解找对应方法的时候得加这个判断
+//                            if (!isAnnotation){
+//                                return
+//                            }
+
+                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/MainActivity", "notifyInsert", "()V", false)
+                            methodVisitor.visitLdcInsn(name)
+                            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
+                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setStartTime", "(Ljava/lang/String;J)V", false)
                         }
 
                         @Override
                         protected void onMethodExit(int opcode) {
                             super.onMethodExit(opcode)
                             //使用注解找对应方法的时候得加这个判断
+//                            if (!isAnnotation){
+//                                return
+//                            }
+
+                            methodVisitor.visitLdcInsn(name)
+                            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
+                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setEndTime", "(Ljava/lang/String;J)V", false)
+                            methodVisitor.visitLdcInsn("耗时")
+                            methodVisitor.visitLdcInsn(name)
+                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "getCostTime", "(Ljava/lang/String;)Ljava/lang/String;", false)
+                            methodVisitor.visitMethodInsn(INVOKESTATIC, "android/util/Log", "d", "(Ljava/lang/String;Ljava/lang/String;)I", false)
                         }
 
                         /**
@@ -48,6 +66,10 @@ xiaoqingwa{
                          */
                         @Override
                         AnnotationVisitor visitAnnotation(String des, boolean visible) {
+//                            if (des.equals("Lcom/xishuang/annotation/AutoCount;")) {
+//                                println "注解匹配：" + des
+//                                isAnnotation = true
+//                            }
                             return super.visitAnnotation(des, visible)
                         }
                     }
