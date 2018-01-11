@@ -79,7 +79,7 @@ public class AutoTransform extends Transform {
              * 遍历目录
              */
             input.directoryInputs.each { DirectoryInput directoryInput ->
-                File dest = outputProvider.getContentLocation(directoryInput.name, directoryInput.contentTypes, directoryInput.scopes, Format.DIRECTORY);
+                File dest = outputProvider.getContentLocation(directoryInput.name, directoryInput.contentTypes, directoryInput.scopes, Format.DIRECTORY)
                 Logger.info("||-->开始遍历特定目录  ${dest.absolutePath}")
                 File dir = directoryInput.file
                 if (dir) {
@@ -131,7 +131,7 @@ public class AutoTransform extends Transform {
      * 目录文件中修改对应字节码
      */
     private static File modifyClassFile(File dir, File classFile, File tempDir) {
-        File modified
+        File modified = null
         try {
             String className = TextUtil.path2ClassName(classFile.absolutePath.replace(dir.absolutePath + File.separator, ""))
             byte[] sourceClassBytes = IOUtils.toByteArray(new FileInputStream(classFile))

@@ -47,15 +47,6 @@ public class Controller {
         return autoClassFilter.getClassName()
     }
     /**
-     * 需要满足的内部类
-     */
-    static String getInnerClassName() {
-        if (autoClassFilter == null) {
-            return ""
-        }
-        return autoClassFilter.getInnerClassName()
-    }
-    /**
      * 需要满足的实现接口
      */
     static String getInterfaceName() {
@@ -73,14 +64,15 @@ public class Controller {
         }
         return autoClassFilter.getMethodName()
     }
+
     /**
-     * 需要满足继承的类
+     * 需要满足的方法描述符
      */
-    static String getSuperName() {
+    static String getMethodDes() {
         if (autoClassFilter == null) {
             return ""
         }
-        return autoClassFilter.getSuperName()
+        return autoClassFilter.getMethodDes()
     }
 
     static void setMethodVistor(Closure visitor) {

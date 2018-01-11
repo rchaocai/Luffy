@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView view = (TextView) findViewById(R.id.test);
         findViewById(R.id.button).setOnClickListener(this);
         view.setOnClickListener(new View.OnClickListener() {
+            @AutoCount
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "我是文本", Toast.LENGTH_SHORT).show();
@@ -28,10 +29,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         context = this.getApplicationContext();
 
-        countTime();
+        onClick();
     }
     @AutoCount
-    private void countTime() {
+    private void onClick() {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

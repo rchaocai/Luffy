@@ -16,7 +16,7 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'com.android.tools.build:gradle:2.2.2'
+    compile 'com.android.tools.build:gradle:2.0.0'
 }
 
 // 本地调试

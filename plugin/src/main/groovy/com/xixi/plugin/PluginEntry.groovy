@@ -3,8 +3,10 @@ package com.xixi.plugin
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
 import com.xixi.plugin.bean.AutoClassFilter
+import com.xixi.plugin.bean.TextUtil
 import com.xixi.plugin.tracking.AppSettingParams
 import com.xixi.plugin.tracking.AutoTransform
+import com.xixi.plugin.tracking.Logger
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -12,10 +14,8 @@ class PluginEntry implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        println ":applied XX哈哈"
         project.extensions.create('xiaoqingwa', AppSettingParams)
         Controller.setProject(project)
-
 
         //使用Transform实行遍历
         def android = project.extensions.getByType(AppExtension)
@@ -23,6 +23,7 @@ class PluginEntry implements Plugin<Project> {
 
         project.afterEvaluate {
             println project.xiaoqingwa.name
+            Logger.setDebug(project.xiaoqingwa.isDebug)
             //初始化数据
             initData()
         }
@@ -41,17 +42,25 @@ class PluginEntry implements Plugin<Project> {
         paramsList.each {
             Map<String, Object> map ->
                 String className = map.get("ClassName")
-                String innerClassName = map.get("InnerClassName")
                 String interfaceName = map.get("InterfaceName")
                 String methodName = map.get("MethodName")
-                String superName = map.get("SuperName")
+                String methodDes = map.get("MethodDes")
+                // 全类名
+                if (!TextUtil.isEmpty(className)){
+                    className = TextUtil.changeClassNameSeparator(className)
+                }
+                // 实现接口的全类名
+                if (!TextUtil.isEmpty(interfaceName)){
+                    interfaceName = TextUtil.changeClassNameSeparator(interfaceName)
+                }
+
                 classFilter.setClassName(className)
-                classFilter.setInnerClassName(interfaceName)
                 classFilter.setInterfaceName(interfaceName)
                 classFilter.setMethodName(methodName)
-                classFilter.setSuperName(superName)
+                classFilter.setMethodDes(methodDes)
                 Controller.setClassFilter(classFilter)
-                println '应用传递过来的数据' + className+innerClassName+interfaceName+methodName
+                println '应用传递过来的数据->' + '\n-className:' + className +
+                        '\n-interfaceName:' + interfaceName + '\n-methodName:' + methodName + '\n-methodDes:' + methodDes
         }
         //设置是否使用注解查找相关方法，是的话把指定过来条件去掉
         boolean isAnotation = matchData.get("isAnotation")
@@ -61,7 +70,7 @@ class PluginEntry implements Plugin<Project> {
         }
 
         Closure methodVistor = matchData.get("MethodVisitor")
-        Controller.setMethodVistor (methodVistor)
+        Controller.setMethodVistor(methodVistor)
     }
 
 }

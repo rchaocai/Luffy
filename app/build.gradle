@@ -3,7 +3,7 @@ apply plugin: 'apk.move.plugin'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.mmc.sample"
@@ -25,7 +25,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.0'
-//    compile files('libs/MiPush_SDK_Client_3_2_2.jar')
     compile project(':annotation')
 }
 
@@ -37,12 +36,17 @@ import org.objectweb.asm.MethodVisitor
 
 xiaoqingwa{
     name = "小傻逼"
-    //this is the most important part
+    isDebug = true
+    //具体配置
     matchData = [
-            'isAnotation': true, //是否使用注解来找对应方法
+            //是否使用注解来找对应方法
+            'isAnotation': false,
+            //方法的匹配，可以通过类名或者实现的接口名匹配
             'ClassFilter': [
-                    ['ClassName': 'MainActivity', 'InnerClassName': null, 'SuperName': null, 'InterfaceName': null, 'MethodName':'onClick']
+                    ['ClassName': 'com.xishuang.plugintest.MainActivity', 'InterfaceName': 'android/view/View$OnClickListener',
+                     'MethodName':'onClick', 'MethodDes':'(Landroid/view/View;)V']
             ],
+            //插入的字节码，方法的执行顺序visitAnnotation->onMethodEnter->onMethodExit
             'MethodVisitor':{
                 MethodVisitor methodVisitor, int access, String name, String desc ->
                     MethodVisitor adapter = new AutoMethodVisitor(methodVisitor, access, name, desc) {
@@ -50,9 +54,11 @@ xiaoqingwa{
                         @Override
                         protected void onMethodEnter() {
                             super.onMethodEnter()
-                            if (!isAnnotation){
-                                return
-                            }
+                            //使用注解找对应方法的时候得加这个判断
+//                            if (!isAnnotation){
+//                                return
+//                            }
+
                             methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/MainActivity", "notifyInsert", "()V", false)
                             methodVisitor.visitLdcInsn(name)
                             methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
@@ -62,9 +68,11 @@ xiaoqingwa{
                         @Override
                         protected void onMethodExit(int opcode) {
                             super.onMethodExit(opcode)
-                            if (!isAnnotation){
-                                return
-                            }
+                            //使用注解找对应方法的时候得加这个判断
+//                            if (!isAnnotation){
+//                                return
+//                            }
+
                             methodVisitor.visitLdcInsn(name)
                             methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
                             methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setEndTime", "(Ljava/lang/String;J)V", false)
@@ -74,12 +82,15 @@ xiaoqingwa{
                             methodVisitor.visitMethodInsn(INVOKESTATIC, "android/util/Log", "d", "(Ljava/lang/String;Ljava/lang/String;)I", false)
                         }
 
+                        /**
+                         * 需要通过注解的方式加字节码才会重写这个方法来进行条件过滤
+                         */
                         @Override
                         AnnotationVisitor visitAnnotation(String des, boolean visible) {
-                            if (des.equals("Lcom/xishuang/annotation/AutoCount;")) {
-                                println ":applied XX哈哈" + isAnnotation.toString()
-                                isAnnotation = true
-                            }
+//                            if (des.equals("Lcom/xishuang/annotation/AutoCount;")) {
+//                                println "注解匹配：" + des
+//                                isAnnotation = true
+//                            }
                             return super.visitAnnotation(des, visible)
                         }
                     }
