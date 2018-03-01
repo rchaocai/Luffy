@@ -59,10 +59,15 @@ xiaoqingwa{
 //                                return
 //                            }
 
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/MainActivity", "notifyInsert", "()V", false)
+//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/MainActivity", "notifyInsert", "()V", false)
+//                            methodVisitor.visitLdcInsn(name)
+//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
+//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setStartTime", "(Ljava/lang/String;J)V", false)
+
                             methodVisitor.visitLdcInsn(name)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setStartTime", "(Ljava/lang/String;J)V", false)
+                            methodVisitor.visitVarInsn(ALOAD, 1)
+                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/AutoHelper", "onClick", "(Ljava/lang/String;Landroid/view/View;)V", false)
+
                         }
 
                         @Override
@@ -73,13 +78,13 @@ xiaoqingwa{
 //                                return
 //                            }
 
-                            methodVisitor.visitLdcInsn(name)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setEndTime", "(Ljava/lang/String;J)V", false)
-                            methodVisitor.visitLdcInsn("耗时")
-                            methodVisitor.visitLdcInsn(name)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "getCostTime", "(Ljava/lang/String;)Ljava/lang/String;", false)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "android/util/Log", "d", "(Ljava/lang/String;Ljava/lang/String;)I", false)
+//                            methodVisitor.visitLdcInsn(name)
+//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
+//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setEndTime", "(Ljava/lang/String;J)V", false)
+//                            methodVisitor.visitLdcInsn("耗时")
+//                            methodVisitor.visitLdcInsn(name)
+//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "getCostTime", "(Ljava/lang/String;)Ljava/lang/String;", false)
+//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "android/util/Log", "d", "(Ljava/lang/String;Ljava/lang/String;)I", false)
                         }
 
                         /**
