@@ -3,9 +3,9 @@
     package="com.xishuang.plugintest">
 
     <application
+        android:name=".AutoApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:name=".AutoApplication"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -16,6 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".TabActivity"></activity>
     </application>
 
 </manifest>

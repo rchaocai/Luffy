@@ -1,9 +1,14 @@
 package com.xishuang.plugintest;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.List;
 
 /**
  * Author:xishuang
@@ -14,53 +19,15 @@ public class AutoHelper {
     private static final String TAG = AutoHelper.class.getSimpleName();
     private static Context context = AutoApplication.getInstance().getApplicationContext();
 
+    /**
+     * 实现onClick点击时间的自动注入处理
+     */
     public static void onClick(String methodName, View view) {
-        //1. 构造ViewPath中于view对应的节点:ViewType[index]
-
-        String path = getPath(methodName, view);
+        String path = AutoUtil.getPath(context, view);
+        String activityName = AutoUtil.getActivityName(view);
+        path = activityName + ":" + methodName + ":" + path;
         Log.d(TAG, path);
     }
 
-    /**
-     * 构造view的全路径作为标识
-     */
-    private static String getPath(String methodName, View childView) {
-        StringBuilder builder = new StringBuilder();
-        String viewType = childView.getClass().getSimpleName();
-        View parentView = childView;
-        int index;
-        // 遍历view获取父view来进行拼接
-        do {
-            index = ((ViewGroup) childView.getParent()).indexOfChild(childView);
-            builder.insert(0, getResourceId(childView.getId()));
-            builder.insert(0, "]");
-            builder.insert(0, index);
-            builder.insert(0, "[");
-            builder.insert(0, viewType);
 
-            parentView = (ViewGroup) parentView.getParent();
-            viewType = parentView.getClass().getSimpleName();
-            childView = parentView;
-            builder.insert(0, "/");
-        } while (parentView.getParent() instanceof View);
-
-        builder.insert(0, getResourceId(childView.getId()));
-        builder.insert(0, viewType);
-        builder.insert(0, "->");
-        builder.insert(0, methodName);
-        return builder.toString();
-    }
-
-    /**
-     * 通过资源id来获取xml中设置的id名字
-     */
-    private static String getResourceId(int viewId){
-        String resourceName = "";
-        try {
-            resourceName = context.getResources().getResourceEntryName(viewId);
-            resourceName = "#" + resourceName;
-        } catch (Exception e) {
-        }
-        return resourceName;
-    }
 }

@@ -1,6 +1,7 @@
 package com.xishuang.plugintest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TextView view = (TextView) findViewById(R.id.test);
-        findViewById(R.id.button3).setOnClickListener(this);
+        findViewById(R.id.main_go).setOnClickListener(this);
         view.setOnClickListener(new View.OnClickListener() {
             @AutoCount
             @Override
@@ -28,12 +29,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         context = this.getApplicationContext();
-
-        onClick();
-    }
-    @AutoCount
-    private void onClick() {
-
     }
 
     @Override
@@ -49,5 +44,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @AutoCount
     @Override
     public void onClick(View v) {
+        if (v.getId() == R.id.main_go) {
+            startActivity(new Intent(this, TabActivity.class));
+        }
     }
 }

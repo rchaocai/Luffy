@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'apk.move.plugin'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.mmc.sample"
-        minSdkVersion 10
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -24,33 +24,36 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.0'
     compile project(':annotation')
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.4.0'
 }
-
 
 
 import com.xixi.plugin.tracking.AutoMethodVisitor
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.MethodVisitor
 
-xiaoqingwa{
+xiaoqingwa {
     name = "小傻逼"
     isDebug = true
     //具体配置
     matchData = [
             //是否使用注解来找对应方法
-            'isAnotation': false,
+            'isAnotation'  : false,
             //方法的匹配，可以通过类名或者实现的接口名匹配
-            'ClassFilter': [
-                    ['ClassName': 'com.xishuang.plugintest.MainActivity', 'InterfaceName': 'android/view/View$OnClickListener',
-                     'MethodName':'onClick', 'MethodDes':'(Landroid/view/View;)V']
+            'ClassFilter'  : [
+                    ['ClassName' : '', 'InterfaceName': 'android/view/View$OnClickListener',
+                     'MethodName': 'onClick', 'MethodDes': '(Landroid/view/View;)V']
             ],
             //插入的字节码，方法的执行顺序visitAnnotation->onMethodEnter->onMethodExit
-            'MethodVisitor':{
+            'MethodVisitor': {
                 MethodVisitor methodVisitor, int access, String name, String desc ->
                     MethodVisitor adapter = new AutoMethodVisitor(methodVisitor, access, name, desc) {
                         boolean isAnnotation = false
+
                         @Override
                         protected void onMethodEnter() {
                             super.onMethodEnter()

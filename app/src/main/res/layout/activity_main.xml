@@ -29,11 +29,11 @@
             android:text="我是按钮"/>
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/main_go"
             android:layout_marginTop="100dp"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:text="我是按钮"/>
+            android:text="跳转"/>
     </LinearLayout>
 
 
