@@ -1,8 +1,8 @@
 package com.xixi.plugin.tracking
 
 import com.xixi.plugin.Controller
-
-import com.xixi.plugin.bean.TextUtil
+import com.xixi.plugin.util.ChoiceUtil
+import com.xixi.plugin.util.TextUtil
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
@@ -18,6 +18,8 @@ public class AutoClassVisitor extends ClassVisitor {
      */
     private boolean isMeetClassCondition = false
 
+    private String className
+
     AutoClassVisitor(final ClassVisitor cv) {
         super(Opcodes.ASM4, cv)
     }
@@ -26,8 +28,11 @@ public class AutoClassVisitor extends ClassVisitor {
     void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         String appInterfaceName = Controller.getInterfaceName()
         String appClassName = Controller.getClassName()
+
+        className = name
         // 是否满足实现的接口，剔除掉以android开头的类，即系统类，以避免出现不可预测的bug
 //        if (!TextUtil.isEmpty(appInterfaceName) && !name.contains('$')) {
+
         if (!TextUtil.isEmpty(appInterfaceName) && !name.startsWith('android')) {
             interfaces.each {
                 String inteface ->
@@ -37,11 +42,11 @@ public class AutoClassVisitor extends ClassVisitor {
             }
         }
         // 是否满足指定类
-        if (!TextUtil.isEmpty(appClassName) && name.contains(appClassName)) {
+        if ((!TextUtil.isEmpty(appClassName) && name.contains(appClassName)) || (!name.startsWith('android') && name.contains("Fragment"))) {
             isMeetClassCondition = true
         }
         // 打印调试信息
-        if (isMeetClassCondition){
+        if (isMeetClassCondition) {
             Logger.info('||\n||------------------------------开始遍历类 Start--------------------------------------')
             if (!seeModifyMethod) {
                 Logger.logForEach('||* visitStart *', Logger.accCode2String(access), name, signature, superName, interfaces)
@@ -54,7 +59,7 @@ public class AutoClassVisitor extends ClassVisitor {
     @Override
     void visitInnerClass(String name, String outerName, String innerName, int access) {
         // 内部类
-        if(isMeetClassCondition) {
+        if (isMeetClassCondition) {
             if (!seeModifyMethod) {
                 Logger.logForEach('||* visitInnerClass *', name, outerName, innerName, Logger.accCode2String(access))
             }
@@ -70,7 +75,9 @@ public class AutoClassVisitor extends ClassVisitor {
         String appMethodName = Controller.getMethodName()
         String appMethodDes = Controller.getMethodDes()
 
-        if (isMeetClassCondition && seeModifyMethod && name.equals(appMethodName) && desc.equals(appMethodDes)) { //查看插入字节码之后信息，注解查找就不运行了，每个方法都会遍历到，日志太多
+//        if (isMeetClassCondition && seeModifyMethod && name.equals(appMethodName) && desc.equals(appMethodDes)) {
+        if (isMeetClassCondition && seeModifyMethod && ChoiceUtil.isCanModify(name)) {
+            //查看插入字节码之后信息，注解查找就不运行了，每个方法都会遍历到，日志太多
             Logger.info("||---------------------查看修改后方法${name}-----------------------------")
             Logger.logForEach('||* visitMethod *', Logger.accCode2String(access), name, desc, signature, exceptions)
             adapter = new AutoMethodVisitor(methodVisitor, access, name, desc)
@@ -78,19 +85,23 @@ public class AutoClassVisitor extends ClassVisitor {
             Closure vivi = Controller.getAppMethodVistor()
             if (vivi != null) {
                 try {
-                    adapter = vivi(methodVisitor, access, name, desc)
+//                    adapter = vivi(methodVisitor, access, name, desc)
+                    adapter = ChoiceUtil.getMethodVisitor(className, methodVisitor, access, name, desc)
                 } catch (Exception e) {
                     e.printStackTrace()
                     adapter = null
                 }
             }
-        } else if ((isMeetClassCondition && name.equals(appMethodName) && desc.equals(appMethodDes))) { //指定方法名，根据满足的类条件和方法名
+//        } else if ((isMeetClassCondition && name.equals(appMethodName) && desc.equals(appMethodDes))) {
+        } else if ((isMeetClassCondition && ChoiceUtil.isCanModify(name))) {
+            //指定方法名，根据满足的类条件和方法名
             Logger.info("||-----------------开始修改方法${name}--------------------------")
             Logger.logForEach('||* visitMethod *', Logger.accCode2String(access), name, desc, signature, exceptions)
             Closure vivi = Controller.getAppMethodVistor()
             if (vivi != null) {
                 try {
-                    adapter = vivi(methodVisitor, access, name, desc)
+//                    adapter = vivi(methodVisitor, access, name, desc)
+                    adapter = ChoiceUtil.getMethodVisitor(className, methodVisitor, access, name, desc)
                 } catch (Exception e) {
                     e.printStackTrace()
                     adapter = null
@@ -106,7 +117,7 @@ public class AutoClassVisitor extends ClassVisitor {
     @Override
     void visitEnd() {
         if (isMeetClassCondition) {
-            if (!seeModifyMethod){
+            if (!seeModifyMethod) {
                 Logger.logForEach('||* visitEnd *')
             }
             Logger.info('||------------------------------结束遍历类 end--------------------------------------')

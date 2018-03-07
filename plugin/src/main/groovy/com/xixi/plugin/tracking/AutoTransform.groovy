@@ -4,8 +4,7 @@ import com.android.annotations.NonNull
 import com.android.annotations.Nullable
 import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
-import com.xixi.plugin.*
-import com.xixi.plugin.bean.TextUtil
+import com.xixi.plugin.util.TextUtil
 import groovy.io.FileType
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils

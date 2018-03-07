@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.xishuang.plugintest.AutoHelper;
 import com.xishuang.plugintest.MyItemRecyclerViewAdapter;
 import com.xishuang.plugintest.R;
 import com.xishuang.plugintest.dummy.DummyContent;
@@ -21,13 +22,6 @@ public class ItemFragment extends Fragment {
     private static final String ARG_CONTENT = "content";
     private String mContent;
     private OnListFragmentInteractionListener mListener;
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public ItemFragment() {
-    }
 
     @SuppressWarnings("unused")
     public static ItemFragment newInstance(String content) {
@@ -93,4 +87,24 @@ public class ItemFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(DummyItem item);
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//    }
+//
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//    }
+//
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        super.onHiddenChanged(hidden);
+//    }
 }

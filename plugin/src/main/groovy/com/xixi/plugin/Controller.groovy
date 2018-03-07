@@ -1,6 +1,6 @@
 package com.xixi.plugin
 
-import com.xixi.plugin.bean.AutoClassFilter
+import com.xixi.plugin.util.AutoClassFilter
 import com.xixi.plugin.tracking.AppSettingParams
 import org.gradle.api.Project
 

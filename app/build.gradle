@@ -46,7 +46,7 @@ xiaoqingwa {
             //方法的匹配，可以通过类名或者实现的接口名匹配
             'ClassFilter'  : [
                     ['ClassName' : '', 'InterfaceName': 'android/view/View$OnClickListener',
-                     'MethodName': 'onClick', 'MethodDes': '(Landroid/view/View;)V']
+                     'MethodName': 'setUserVisibleHint', 'MethodDes': '(Landroid/support/v4/app/Fragment;Z)V']
             ],
             //插入的字节码，方法的执行顺序visitAnnotation->onMethodEnter->onMethodExit
             'MethodVisitor': {
@@ -67,27 +67,18 @@ xiaoqingwa {
 //                            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
 //                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setStartTime", "(Ljava/lang/String;J)V", false)
 
-                            methodVisitor.visitLdcInsn(name)
-                            methodVisitor.visitVarInsn(ALOAD, 1)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/AutoHelper", "onClick", "(Ljava/lang/String;Landroid/view/View;)V", false)
-
+//                            methodVisitor.visitLdcInsn(name)
+//                            methodVisitor.visitVarInsn(ALOAD, 1)
+//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/AutoHelper", "onClick", "(Ljava/lang/String;Landroid/view/View;)V", false)
                         }
 
                         @Override
                         protected void onMethodExit(int opcode) {
                             super.onMethodExit(opcode)
-                            //使用注解找对应方法的时候得加这个判断
-//                            if (!isAnnotation){
-//                                return
-//                            }
-
-//                            methodVisitor.visitLdcInsn(name)
-//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
-//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setEndTime", "(Ljava/lang/String;J)V", false)
-//                            methodVisitor.visitLdcInsn("耗时")
-//                            methodVisitor.visitLdcInsn(name)
-//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "getCostTime", "(Ljava/lang/String;)Ljava/lang/String;", false)
-//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "android/util/Log", "d", "(Ljava/lang/String;Ljava/lang/String;)I", false)
+                            // setFragmentUserVisibleHint方法
+                            methodVisitor.visitVarInsn(ALOAD, 0);
+                            methodVisitor.visitVarInsn(ILOAD, 1);
+                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/AutoHelper", "setFragmentUserVisibleHint", "(Landroid/support/v4/app/Fragment;Z)V", false);
                         }
 
                         /**

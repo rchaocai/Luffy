@@ -2,8 +2,8 @@ package com.xixi.plugin
 
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
-import com.xixi.plugin.bean.AutoClassFilter
-import com.xixi.plugin.bean.TextUtil
+import com.xixi.plugin.util.AutoClassFilter
+import com.xixi.plugin.util.TextUtil
 import com.xixi.plugin.tracking.AppSettingParams
 import com.xixi.plugin.tracking.AutoTransform
 import com.xixi.plugin.tracking.Logger

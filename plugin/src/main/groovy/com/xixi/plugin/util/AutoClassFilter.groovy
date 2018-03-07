@@ -1,4 +1,4 @@
-package com.xixi.plugin.bean
+package com.xixi.plugin.util
 
 /**
  * 信息匹配用
