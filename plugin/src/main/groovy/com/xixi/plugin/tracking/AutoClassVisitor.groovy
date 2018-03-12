@@ -26,8 +26,8 @@ public class AutoClassVisitor extends ClassVisitor {
     void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         String appInterfaceName = Controller.getInterfaceName()
         String appClassName = Controller.getClassName()
-        // 是否满足实现的接口
-        if (!TextUtil.isEmpty(appInterfaceName) && !name.contains('$')) {
+        // 是否满足实现的接口，剔除掉以android开头的类，即系统类，以避免出现不可预测的bug
+        if (!TextUtil.isEmpty(appInterfaceName) && !name.startsWith('android')) {
             interfaces.each {
                 String inteface ->
                     if (inteface.equals(appInterfaceName)) {
