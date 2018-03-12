@@ -14,6 +14,7 @@ public class AutoHelper {
     private static final String TAG = AutoHelper.class.getSimpleName();
     private static Context context = AutoApplication.getInstance().getApplicationContext();
 
+
     /**
      * 实现onClick点击时间的自动注入处理
      */
@@ -25,21 +26,18 @@ public class AutoHelper {
     }
 
     public static void onFragmentResume(Fragment fragment) {
-        Log.d(TAG, "onFragmentResume");
+        Log.d(TAG, "onFragmentResume" + fragment.getClass().getSimpleName());
     }
 
     public static void onFragmentPause(Fragment fragment) {
-        Log.d(TAG, "onFragmentPause");
+        Log.d(TAG, "onFragmentPause"  + fragment.getClass().getSimpleName());
     }
 
     public static void setFragmentUserVisibleHint(Fragment fragment, boolean isVisibleToUser) {
-        Log.d(TAG, "setFragmentUserVisibleHint->" + isVisibleToUser);
+        Log.d(TAG, "setFragmentUserVisibleHint->" + isVisibleToUser + "->" + fragment.getClass().getSimpleName());
     }
 
     public static void onFragmentHiddenChanged(Fragment fragment, boolean hidden) {
-        Log.d(TAG, "onFragmentHiddenChanged->" + hidden);
+        Log.d(TAG, "onFragmentHiddenChanged->" + hidden + "->" + fragment.getClass().getSimpleName());
     }
-
-
-
 }
