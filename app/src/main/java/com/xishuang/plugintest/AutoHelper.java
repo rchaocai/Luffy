@@ -25,6 +25,13 @@ public class AutoHelper {
         Log.d(TAG, path);
     }
 
+    /**
+     * 实现onClick点击时间的自动注入处理
+     */
+    public static void onClick() {
+        Log.d(TAG, "onClick()");
+    }
+
     public static void onFragmentResume(Fragment fragment) {
         Log.d(TAG, "onFragmentResume" + fragment.getClass().getSimpleName());
     }

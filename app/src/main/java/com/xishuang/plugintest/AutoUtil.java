@@ -30,7 +30,6 @@ public class AutoUtil {
         // 遍历view获取父view来进行拼接
         do {
             int id = childView.getId();
-            Log.d("AutoHelper", id + "");
             index = ((ViewGroup) childView.getParent()).indexOfChild(childView);
             // 根据从属于不同的类进行index判断
             if (childView.getParent() instanceof RecyclerView) {

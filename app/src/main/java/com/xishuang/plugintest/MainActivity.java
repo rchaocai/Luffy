@@ -41,11 +41,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
     }
 
-    @AutoCount
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.main_go) {
             startActivity(new Intent(this, TabActivity.class));
         }
+    }
+
+    private void doSomething(){
+
     }
 }

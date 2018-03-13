@@ -42,7 +42,7 @@ xiaoqingwa {
     //具体配置
     matchData = [
             //是否使用注解来找对应方法
-            'isAnotation'  : false,
+            'isAnotation'  : true,
             //方法的匹配，可以通过类名或者实现的接口名匹配
             'ClassFilter'  : [
                     ['ClassName' : '', 'InterfaceName': 'android/view/View$OnClickListener',
@@ -61,24 +61,17 @@ xiaoqingwa {
 //                            if (!isAnnotation){
 //                                return
 //                            }
-
-//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/MainActivity", "notifyInsert", "()V", false)
-//                            methodVisitor.visitLdcInsn(name)
-//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
-//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setStartTime", "(Ljava/lang/String;J)V", false)
-
-//                            methodVisitor.visitLdcInsn(name)
-//                            methodVisitor.visitVarInsn(ALOAD, 1)
-//                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/AutoHelper", "onClick", "(Ljava/lang/String;Landroid/view/View;)V", false)
                         }
 
                         @Override
                         protected void onMethodExit(int opcode) {
                             super.onMethodExit(opcode)
-                            // setFragmentUserVisibleHint方法
-                            methodVisitor.visitVarInsn(ALOAD, 0);
-                            methodVisitor.visitVarInsn(ILOAD, 1);
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/AutoHelper", "setFragmentUserVisibleHint", "(Landroid/support/v4/app/Fragment;Z)V", false);
+                            //使用注解找对应方法的时候得加这个判断
+                            if (!isAnnotation) {
+                                return
+                            }
+                            // INVOKESTATIC
+                            methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "onClick", "()V", false)
                         }
 
                         /**
@@ -86,10 +79,10 @@ xiaoqingwa {
                          */
                         @Override
                         AnnotationVisitor visitAnnotation(String des, boolean visible) {
-//                            if (des.equals("Lcom/xishuang/annotation/AutoCount;")) {
-//                                println "注解匹配：" + des
-//                                isAnnotation = true
-//                            }
+                            if (des == 'Lcom/xishuang/annotation/AutoCount;') {
+                                println "注解匹配：" + des
+                                isAnnotation = true
+                            }
                             return super.visitAnnotation(des, visible)
                         }
                     }
