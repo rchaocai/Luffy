@@ -92,7 +92,7 @@ public class AutoHelper {
 
 
     /**
-     * 实现onClick点击时间的自动注入处理
+     * 实现onClick点击事件的自动注入处理
      */
     public static void onClick(View view) {
         String path = AutoUtil.getPath(context, view);
@@ -102,7 +102,7 @@ public class AutoHelper {
     }
 
     /**
-     * 实现onClick点击时间的自动注入处理
+     * 测试方法，测试注解方法以及在module中设置的方法的自动注入处理
      */
     public static void onClick() {
         Log.d(TAG, "onClick()");
