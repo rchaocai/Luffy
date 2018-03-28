@@ -8,6 +8,10 @@ buildscript {
 //            url uri('E:\\androidproject\\plugintest\\snapshotRepo')
             url uri('./snapshotRepo')
         }
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.2'
@@ -20,6 +24,10 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
 }
 

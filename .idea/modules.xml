@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Luffy.iml" filepath="$PROJECT_DIR$/.idea/Luffy.iml" />
       <module fileurl="file://$PROJECT_DIR$/annotation/annotation.iml" filepath="$PROJECT_DIR$/annotation/annotation.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/plugin/plugin.iml" filepath="$PROJECT_DIR$/plugin/plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/plugintest.iml" filepath="$PROJECT_DIR$/.idea/plugintest.iml" />
+      <module fileurl="file://F:\project\Luffy\.idea\plugintest.iml" filepath="F:\project\Luffy\.idea\plugintest.iml" />
       <module fileurl="file://F:\project\plugintest\plugintest.iml" filepath="F:\project\plugintest\plugintest.iml" />
     </modules>
   </component>

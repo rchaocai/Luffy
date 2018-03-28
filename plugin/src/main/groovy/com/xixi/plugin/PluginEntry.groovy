@@ -2,8 +2,8 @@ package com.xixi.plugin
 
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
-import com.xixi.plugin.bean.AutoClassFilter
-import com.xixi.plugin.bean.TextUtil
+import com.xixi.plugin.util.AutoClassFilter
+import com.xixi.plugin.util.TextUtil
 import com.xixi.plugin.tracking.AppSettingParams
 import com.xixi.plugin.tracking.AutoTransform
 import com.xixi.plugin.tracking.Logger
@@ -64,10 +64,11 @@ class PluginEntry implements Plugin<Project> {
         }
         //设置是否使用注解查找相关方法，是的话把指定过来条件去掉
         boolean isAnotation = matchData.get("isAnotation")
+        println '应用传递过来的数据->' + '\n-isAnotation:' + isAnotation
         Controller.setIsUseAnotation(isAnotation)
-        if (isAnotation) {
-            Controller.setClassFilter(null)
-        }
+//        if (isAnotation) {
+//            Controller.setClassFilter(null)
+//        }
 
         Closure methodVistor = matchData.get("MethodVisitor")
         Controller.setMethodVistor(methodVistor)

@@ -1,4 +1,4 @@
-package com.xixi.plugin.bean
+package com.xixi.plugin.util
 
 public class TextUtil {
     static boolean isEmpty(String text) {

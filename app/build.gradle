@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'apk.move.plugin'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.mmc.sample"
-        minSdkVersion 10
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -24,33 +24,36 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.0'
     compile project(':annotation')
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:25.4.0'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.4.0'
 }
-
 
 
 import com.xixi.plugin.tracking.AutoMethodVisitor
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.MethodVisitor
 
-xiaoqingwa{
+xiaoqingwa {
     name = "小傻逼"
     isDebug = true
     //具体配置
     matchData = [
             //是否使用注解来找对应方法
-            'isAnotation': false,
+            'isAnotation'  : false,
             //方法的匹配，可以通过类名或者实现的接口名匹配
-            'ClassFilter': [
-                    ['ClassName': 'com.xishuang.plugintest.MainActivity', 'InterfaceName': 'android/view/View$OnClickListener',
-                     'MethodName':'onClick', 'MethodDes':'(Landroid/view/View;)V']
+            'ClassFilter'  : [
+                    ['ClassName' : 'com/xishuang/plugintest.Counter2', 'InterfaceName': '',
+                     'MethodName': 'test2', 'MethodDes': '()V']
             ],
             //插入的字节码，方法的执行顺序visitAnnotation->onMethodEnter->onMethodExit
-            'MethodVisitor':{
+            'MethodVisitor': {
                 MethodVisitor methodVisitor, int access, String name, String desc ->
                     MethodVisitor adapter = new AutoMethodVisitor(methodVisitor, access, name, desc) {
                         boolean isAnnotation = false
+
                         @Override
                         protected void onMethodEnter() {
                             super.onMethodEnter()
@@ -58,28 +61,17 @@ xiaoqingwa{
 //                            if (!isAnnotation){
 //                                return
 //                            }
-
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/MainActivity", "notifyInsert", "()V", false)
-                            methodVisitor.visitLdcInsn(name)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setStartTime", "(Ljava/lang/String;J)V", false)
                         }
 
                         @Override
                         protected void onMethodExit(int opcode) {
                             super.onMethodExit(opcode)
                             //使用注解找对应方法的时候得加这个判断
-//                            if (!isAnnotation){
+//                            if (!isAnnotation) {
 //                                return
 //                            }
-
-                            methodVisitor.visitLdcInsn(name)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "setEndTime", "(Ljava/lang/String;J)V", false)
-                            methodVisitor.visitLdcInsn("耗时")
-                            methodVisitor.visitLdcInsn(name)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "com/xishuang/plugintest/TimeCache", "getCostTime", "(Ljava/lang/String;)Ljava/lang/String;", false)
-                            methodVisitor.visitMethodInsn(INVOKESTATIC, "android/util/Log", "d", "(Ljava/lang/String;Ljava/lang/String;)I", false)
+                            // INVOKESTATIC
+                            methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "onClick", "()V", false)
                         }
 
                         /**
@@ -87,7 +79,7 @@ xiaoqingwa{
                          */
                         @Override
                         AnnotationVisitor visitAnnotation(String des, boolean visible) {
-//                            if (des.equals("Lcom/xishuang/annotation/AutoCount;")) {
+//                            if (des == 'Lcom/xishuang/annotation/AutoCount;') {
 //                                println "注解匹配：" + des
 //                                isAnnotation = true
 //                            }
