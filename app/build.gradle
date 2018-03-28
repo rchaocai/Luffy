@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'apk.move.plugin'
 
 android {
     compileSdkVersion 25
@@ -31,6 +30,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.4.0'
 }
 
+apply plugin: 'apk.move.plugin'
 
 import com.xixi.plugin.tracking.AutoMethodVisitor
 import org.objectweb.asm.AnnotationVisitor
