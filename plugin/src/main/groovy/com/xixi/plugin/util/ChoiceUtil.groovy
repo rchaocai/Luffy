@@ -181,7 +181,8 @@ class ChoiceUtil {
         if (name == appMethodName && desc == appMethodDes) {
             return true
         } else if (Controller.isUseAnotation()) {
-            //使用注解的方式
+            //使用注解的方式，直接就方法匹配，因为注解的方法hook是自己在app module中
+            //控制的
             return true
         }
         return false

@@ -7,7 +7,13 @@ import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
-
+/**
+ * Author:xishuang
+ * Date:2018.03.28
+ * Des:类的遍历，遍历其中方法，满足两个条件才能修改方法字节码：
+ *      1、类要匹配，类匹配就会遍历其中的每个方法
+ *      2、方法匹配，{@link ChoiceUtil#getMethodVisitor}，匹配才会选中对应方法修改器来修改
+ */
 public class AutoClassVisitor extends ClassVisitor {
     /**
      * 是否查看修改后的方法

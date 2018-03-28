@@ -26,7 +26,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':annotation')
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:design:25.4.0'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.4.0'
 }
@@ -42,11 +42,11 @@ xiaoqingwa {
     //具体配置
     matchData = [
             //是否使用注解来找对应方法
-            'isAnotation'  : true,
+            'isAnotation'  : false,
             //方法的匹配，可以通过类名或者实现的接口名匹配
             'ClassFilter'  : [
-                    ['ClassName' : '', 'InterfaceName': 'android/view/View$OnClickListener',
-                     'MethodName': 'setUserVisibleHint', 'MethodDes': '(Landroid/support/v4/app/Fragment;Z)V']
+                    ['ClassName' : 'com/xishuang/plugintest.Counter2', 'InterfaceName': '',
+                     'MethodName': 'test2', 'MethodDes': '()V']
             ],
             //插入的字节码，方法的执行顺序visitAnnotation->onMethodEnter->onMethodExit
             'MethodVisitor': {
@@ -67,9 +67,9 @@ xiaoqingwa {
                         protected void onMethodExit(int opcode) {
                             super.onMethodExit(opcode)
                             //使用注解找对应方法的时候得加这个判断
-                            if (!isAnnotation) {
-                                return
-                            }
+//                            if (!isAnnotation) {
+//                                return
+//                            }
                             // INVOKESTATIC
                             methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "onClick", "()V", false)
                         }
@@ -79,10 +79,10 @@ xiaoqingwa {
                          */
                         @Override
                         AnnotationVisitor visitAnnotation(String des, boolean visible) {
-                            if (des == 'Lcom/xishuang/annotation/AutoCount;') {
-                                println "注解匹配：" + des
-                                isAnnotation = true
-                            }
+//                            if (des == 'Lcom/xishuang/annotation/AutoCount;') {
+//                                println "注解匹配：" + des
+//                                isAnnotation = true
+//                            }
                             return super.visitAnnotation(des, visible)
                         }
                     }
