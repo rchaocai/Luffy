@@ -125,6 +125,7 @@ public class AutoHelper {
     }
 ```
 
+ ![image](https://github.com/JieYuShi/Luffy/blob/master/img.png)
 
 要是使用演示的话，因为还没上传到jcenter库，所以只能本地仓库打包插件，记得要先把依赖都注释掉，插件打包完成后再启用，不然会编译不过去的。
 
