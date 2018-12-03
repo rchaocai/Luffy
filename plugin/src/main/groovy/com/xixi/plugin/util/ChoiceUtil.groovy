@@ -33,7 +33,8 @@ class ChoiceUtil {
                     // ALOAD 25
                     methodVisitor.visitVarInsn(25, 1)
                     // INVOKESTATIC 184
-                    methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "onClick", "(Landroid/view/View;)V", false)
+//                    methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "onClick", "(Landroid/view/View;)V", false)
+                    methodVisitor.visitMethodInsn(184, "com/mmc/lamandys/liba_datapick/AutoHelper", "onClick", "(Landroid/view/View;)V", false)
                 }
             }
         } else if (name == "onResume" && className.contains("Fragment")) {
@@ -44,7 +45,8 @@ class ChoiceUtil {
                     // ALOAD
                     methodVisitor.visitVarInsn(25, 0)
                     // INVOKESTATIC 184
-                    methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "onFragmentResume", "(Landroid/support/v4/app/Fragment;)V", false)
+//                    methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "onFragmentResume", "(Landroid/support/v4/app/Fragment;)V", false)
+                    methodVisitor.visitMethodInsn(184, "com/mmc/lamandys/liba_datapick/AutoHelper", "onFragmentResume", "(Landroid/support/v4/app/Fragment;)V", false)
                 }
             }
         } else if (name == "onPause" && className.contains("Fragment")) {
@@ -55,7 +57,8 @@ class ChoiceUtil {
                     // ALOAD 25
                     methodVisitor.visitVarInsn(25, 0)
                     // INVOKESTATIC 184
-                    methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "onFragmentPause", "(Landroid/support/v4/app/Fragment;)V", false)
+//                    methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "onFragmentPause", "(Landroid/support/v4/app/Fragment;)V", false)
+                    methodVisitor.visitMethodInsn(184, "com/mmc/lamandys/liba_datapick/AutoHelper", "onFragmentPause", "(Landroid/support/v4/app/Fragment;)V", false)
                 }
             }
         } else if (name == "setUserVisibleHint" && className.contains("Fragment")) {
@@ -68,7 +71,8 @@ class ChoiceUtil {
                     // ILOAD 21
                     methodVisitor.visitVarInsn(21, 1)
                     // INVOKESTATIC 184
-                    methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "setFragmentUserVisibleHint", "(Landroid/support/v4/app/Fragment;Z)V", false)
+//                    methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "setFragmentUserVisibleHint", "(Landroid/support/v4/app/Fragment;Z)V", false)
+                    methodVisitor.visitMethodInsn(184, "com/mmc/lamandys/liba_datapick/AutoHelper", "setFragmentUserVisibleHint", "(Landroid/support/v4/app/Fragment;Z)V", false)
                 }
             }
         } else if (name == "onHiddenChanged" && className.contains("Fragment")) {
@@ -81,7 +85,8 @@ class ChoiceUtil {
                     // ILOAD 21
                     methodVisitor.visitVarInsn(21, 1)
                     // INVOKESTATIC 184
-                    methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "onFragmentHiddenChanged", "(Landroid/support/v4/app/Fragment;Z)V", false)
+//                    methodVisitor.visitMethodInsn(184, "com/xishuang/plugintest/AutoHelper", "onFragmentHiddenChanged", "(Landroid/support/v4/app/Fragment;Z)V", false)
+                    methodVisitor.visitMethodInsn(184, "com/mmc/lamandys/liba_datapick/AutoHelper", "onFragmentHiddenChanged", "(Landroid/support/v4/app/Fragment;Z)V", false)
                 }
             }
         } else if (Controller.isUseAnotation()) {

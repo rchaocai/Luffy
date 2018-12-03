@@ -20,15 +20,65 @@ dependencies {
 }
 
 // 本地调试
-group = 'com.xixi.plugin'
-version = '1.0.1'
+//group = 'com.xixi.plugin'
+//version = '1.0.1'
+//
+//uploadArchives {
+//    version = version + '-SNAPSHOT'//if you are testing the demo I provide locally, you can uncomment this.
+//    repositories {
+//        mavenDeployer {
+////            repository(url: uri('../repo'))
+//            snapshotRepository(url: uri('../snapshotRepo'))
+//        }
+//    }
+//}
 
-uploadArchives {
-    version = version + '-SNAPSHOT'//if you are testing the demo I provide locally, you can uncomment this.
-    repositories {
-        mavenDeployer {
-//            repository(url: uri('../repo'))
-            snapshotRepository(url: uri('../snapshotRepo'))
+
+
+//是否提交到仓库
+def uploadDataGatherSdk = true
+//是否为正式版
+def release = false
+version = '1.0.0'
+
+//提交到服务器
+if (uploadDataGatherSdk) {
+    apply plugin: 'maven'
+
+    group = 'oms.mmc'
+    version = !release ? version + '-SNAPSHOT' : version
+
+    task sourceJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        //当前aar 文件名
+//        archives file('liba_autotrack.aar')
+//        archives androidSourcesJar
+        archives jar
+        archives sourceJar
+        archives javadocJar
+    }
+
+
+    uploadArchives {
+
+        repositories.mavenDeployer {
+            println "upload dataGather version:" + version
+            repository(url: MAVEN_R_URL) {
+                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
+            }
+            snapshotRepository(url: MAVEN_S_URL) {
+                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
+            }
+            pom.artifactId = "autotrack"
         }
     }
 }
