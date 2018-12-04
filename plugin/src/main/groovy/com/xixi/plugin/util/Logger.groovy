@@ -1,7 +1,5 @@
-package com.xixi.plugin.tracking
+package com.xixi.plugin.util
 
-import com.xixi.plugin.Controller
-import org.apache.commons.io.IOUtils
 
 import java.lang.reflect.Array
 
@@ -25,7 +23,7 @@ public class Logger {
      * 打印日志
      */
     def static info(Object msg) {
-        if (!isDebug || Controller.isUseAnotation()) return
+        if (!isDebug) return
         try {
             println "${msg}"
         } catch (Exception e) {
@@ -34,7 +32,7 @@ public class Logger {
     }
 
     def static logForEach(Object... msg) {
-        if (!isDebug || Controller.isUseAnotation()) return
+        if (!isDebug) return
         msg.each {
             Object m ->
                 try {
