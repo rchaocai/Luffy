@@ -9,13 +9,24 @@ buildscript {
             url uri('./snapshotRepo')
         }
         maven {
+            url 'http://maven.aliyun.com/nexus/content/groups/public'
+        }
+        maven {
             url 'https://maven.google.com/'
             name 'Google'
         }
+        maven {
+            url MAVEN_URL
+            credentials {
+                username MAVEN_USERNAME
+                password MAVEN_PASSWORD
+            }
+        }
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath 'com.xixi.plugin:plugin:1.0.1-SNAPSHOT'
+        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'oms.mmc:autotrack-gradle-plugin:1.0.1-SNAPSHOT'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

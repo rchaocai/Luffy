@@ -2,27 +2,29 @@ package com.xixi.plugin
 
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
-import com.xixi.plugin.util.AutoClassFilter
-import com.xixi.plugin.util.TextUtil
-import com.xixi.plugin.tracking.AppSettingParams
-import com.xixi.plugin.tracking.AutoTransform
-import com.xixi.plugin.tracking.Logger
+import com.xixi.plugin.bean.AutoClassFilter
+import com.xixi.plugin.util.AutoTextUtil
+import com.xixi.plugin.bean.AutoSettingParams
+import com.xixi.plugin.asm.AutoTransform
+import com.xixi.plugin.util.Logger
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
+/**
+ * 插件入口
+ */
 class PluginEntry implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.extensions.create('xiaoqingwa', AppSettingParams)
-        Controller.setProject(project)
+        project.extensions.create('xiaoqingwa', AutoSettingParams)
+        GlobalConfig.setProject(project)
 
         //使用Transform实行遍历
         def android = project.extensions.getByType(AppExtension)
         registerTransform(android)
 
         project.afterEvaluate {
-            println project.xiaoqingwa.name
             Logger.setDebug(project.xiaoqingwa.isDebug)
             //初始化数据
             initData()
@@ -34,44 +36,44 @@ class PluginEntry implements Plugin<Project> {
         android.registerTransform(transform)
     }
 
+    /**
+     * 对build.gradle配置参数及自定义内容进行解析
+     */
     static void initData() {
-        Map<String, Object> matchData = Controller.getParams().matchData
 
-        List<Map<String, Object>> paramsList = matchData.get("ClassFilter")
-        AutoClassFilter classFilter = new AutoClassFilter()
-        paramsList.each {
+        List<Map<String, Object>> matchDataList = GlobalConfig.getParams().matchData
+        List<AutoClassFilter> autoClassFilterList = new ArrayList<>()
+
+        matchDataList.each {
             Map<String, Object> map ->
+                AutoClassFilter classFilter = new AutoClassFilter()
+
                 String className = map.get("ClassName")
                 String interfaceName = map.get("InterfaceName")
                 String methodName = map.get("MethodName")
                 String methodDes = map.get("MethodDes")
-                // 全类名
-                if (!TextUtil.isEmpty(className)){
-                    className = TextUtil.changeClassNameSeparator(className)
+                Closure methodVisitor = map.get("MethodVisitor")
+                boolean isAnnotation = map.get("isAnnotation")
+                // 类的全类名
+                if (!AutoTextUtil.isEmpty(className)) {
+                    className = AutoTextUtil.changeClassNameSeparator(className)
                 }
-                // 实现接口的全类名
-                if (!TextUtil.isEmpty(interfaceName)){
-                    interfaceName = TextUtil.changeClassNameSeparator(interfaceName)
+                // 接口的全类名
+                if (!AutoTextUtil.isEmpty(interfaceName)) {
+                    interfaceName = AutoTextUtil.changeClassNameSeparator(interfaceName)
                 }
 
                 classFilter.setClassName(className)
                 classFilter.setInterfaceName(interfaceName)
                 classFilter.setMethodName(methodName)
                 classFilter.setMethodDes(methodDes)
-                Controller.setClassFilter(classFilter)
-                println '应用传递过来的数据->' + '\n-className:' + className +
-                        '\n-interfaceName:' + interfaceName + '\n-methodName:' + methodName + '\n-methodDes:' + methodDes
-        }
-        //设置是否使用注解查找相关方法，是的话把指定过来条件去掉
-        boolean isAnotation = matchData.get("isAnotation")
-        println '应用传递过来的数据->' + '\n-isAnotation:' + isAnotation
-        Controller.setIsUseAnotation(isAnotation)
-//        if (isAnotation) {
-//            Controller.setClassFilter(null)
-//        }
+                classFilter.setMethodVisitor(methodVisitor)
+                classFilter.setIsAnnotation(isAnnotation)
 
-        Closure methodVistor = matchData.get("MethodVisitor")
-        Controller.setMethodVistor(methodVistor)
+                autoClassFilterList.add(classFilter)
+        }
+
+        GlobalConfig.setAutoClassFilter(autoClassFilterList)
     }
 
 }

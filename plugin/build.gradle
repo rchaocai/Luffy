@@ -2,83 +2,92 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'groovy'
 
-compileGroovy {
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
-    options.encoding = "UTF-8"
-}
+//compileGroovy {
+//    sourceCompatibility = 1.7
+//    targetCompatibility = 1.7
+//    options.encoding = "UTF-8"
+//}
 
 repositories {
     jcenter()
     mavenCentral()
 }
 
+targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_7
+
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
-    compile 'com.android.tools.build:gradle:2.0.0'
+    implementation gradleApi()
+    implementation localGroovy()
+    compile 'org.ow2.asm:asm:6.0'
+    compile 'org.ow2.asm:asm-commons:6.0'
+    compile 'com.android.tools.build:gradle:3.0.0'
 }
 
 // 本地调试
-//group = 'com.xixi.plugin'
-//version = '1.0.1'
-//
-//uploadArchives {
-//    version = version + '-SNAPSHOT'//if you are testing the demo I provide locally, you can uncomment this.
-//    repositories {
-//        mavenDeployer {
-////            repository(url: uri('../repo'))
-//            snapshotRepository(url: uri('../snapshotRepo'))
-//        }
-//    }
-//}
+def groupId = 'oms.mmc'
+def version = '1.0.1'
+def artifactId = 'autotrack-gradle-plugin'
 
-
-
-//是否提交到仓库
-def uploadDataGatherSdk = true
-//是否为正式版
-def release = false
-version = '1.0.0'
-
-//提交到服务器
-if (uploadDataGatherSdk) {
-    apply plugin: 'maven'
-
-    group = 'oms.mmc'
-    version = !release ? version + '-SNAPSHOT' : version
-
-    task sourceJar(type: Jar) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
-
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
-        from javadoc.destinationDir
-    }
-
-    artifacts {
-        //当前aar 文件名
-//        archives file('liba_autotrack.aar')
-//        archives androidSourcesJar
-        archives jar
-        archives sourceJar
-        archives javadocJar
-    }
-
-
-    uploadArchives {
-
-        repositories.mavenDeployer {
-            println "upload dataGather version:" + version
-            repository(url: MAVEN_R_URL) {
-                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
-            }
-            snapshotRepository(url: MAVEN_S_URL) {
-                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
-            }
-            pom.artifactId = "autotrack"
+uploadArchives {
+    version = version + '-SNAPSHOT'//if you are testing the demo I provide locally, you can uncomment this.
+    repositories {
+        mavenDeployer {
+//            repository(url: uri('../repo'))
+            snapshotRepository(url: uri('../snapshotRepo'))
+            pom.groupId = groupId
+            pom.artifactId = artifactId
+            pom.version = version
         }
     }
 }
+
+
+
+////是否提交到仓库
+//def uploadDataGatherSdk = true
+////是否为正式版
+//def release = false
+//version = '1.0.0'
+//
+////提交到服务器
+//if (uploadDataGatherSdk) {
+//    apply plugin: 'maven'
+//
+//    group = 'oms.mmc'
+//    version = !release ? version + '-SNAPSHOT' : version
+//
+//    task sourceJar(type: Jar) {
+//        classifier = 'sources'
+//        from sourceSets.main.allSource
+//    }
+//
+//    task javadocJar(type: Jar, dependsOn: javadoc) {
+//        classifier = 'javadoc'
+//        from javadoc.destinationDir
+//    }
+//
+//    artifacts {
+//        //当前aar 文件名
+////        archives file('liba_autotrack.aar')
+////        archives androidSourcesJar
+//        archives jar
+//        archives sourceJar
+//        archives javadocJar
+//    }
+//
+//
+//    uploadArchives {
+//
+//        repositories.mavenDeployer {
+//            println "upload dataGather version:" + version
+//            repository(url: MAVEN_R_URL) {
+//                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
+//            }
+//            snapshotRepository(url: MAVEN_S_URL) {
+//                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
+//            }
+//            pom.artifactId = "autotrack"
+//        }
+//    }
+//}

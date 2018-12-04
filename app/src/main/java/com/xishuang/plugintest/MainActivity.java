@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         TextView view = (TextView) findViewById(R.id.test);
         findViewById(R.id.main_go).setOnClickListener(this);
+        findViewById(R.id.button1).setOnClickListener(this);
         view.setOnClickListener(new View.OnClickListener() {
             @AutoCount
             @Override
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v.getId() == R.id.main_go) {
             startActivity(new Intent(this, TabActivity.class));
+        } else if (v.getId() == R.id.button1) {
+//            Toast.makeText(MainActivity.this, "我是按钮1", Toast.LENGTH_SHORT).show();
+//            Log.d("自动埋点", Thread.currentThread().getName());
         }
     }
 

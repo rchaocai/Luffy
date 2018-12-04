@@ -1,0 +1,152 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '26.0.2'
+
+    defaultConfig {
+        applicationId "com.mmc.sample"
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':annotation')
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:25.4.0'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.4.0'
+}
+
+apply plugin: 'oms.mmc.autotrack'
+
+import com.xixi.plugin.asm.AutoMethodVisitor
+import org.objectweb.asm.AnnotationVisitor
+import org.objectweb.asm.MethodVisitor
+
+xiaoqingwa {
+    // 是否打印日志
+    isDebug = true
+    // 是否打开SDK的日志全埋点采集
+    isOpenLogTrack = false
+    // 支持自定义配置,可选
+    matchData = [[
+                         //方法的匹配，可以通过类名或者实现的接口名匹配
+                         'ClassName'    : 'com.mmc.lamandys.liba_datapick.Counter2',
+                         'InterfaceName': '',
+                         'MethodName'   : 'test2',
+                         'MethodDes'    : '(Landroid/view/View;)V',
+                         'isAnnotation' : true,
+                         //插入的字节码，方法的执行顺序visitAnnotation->onMethodEnter->onMethodExit
+                         'MethodVisitor': {
+                             MethodVisitor methodVisitor, int access, String name, String desc ->
+                                 MethodVisitor adapter = new AutoMethodVisitor(methodVisitor, access, name, desc) {
+                                     boolean isAnnotation = false
+
+                                     @Override
+                                     protected void onMethodEnter() {
+                                         super.onMethodEnter()
+                                         //使用注解找对应方法的时候得加这个判断
+                                         if (!isAnnotation) {
+                                             return
+                                         }
+                                     }
+
+                                     @Override
+                                     protected void onMethodExit(int opcode) {
+                                         super.onMethodExit(opcode)
+                                         //使用注解找对应方法的时候得加这个判断
+                                         if (!isAnnotation) {
+                                             return
+                                         }
+                                         // INVOKESTATIC
+                                         methodVisitor.visitMethodInsn(184, "com/mmc/lamandys/liba_datapick/AutoHelper", "onClick2", "()V", false)
+                                     }
+
+                                     /**
+                                      * 需要通过注解的方式加字节码才会重写这个方法来进行条件过滤
+                                      */
+                                     @Override
+                                     AnnotationVisitor visitAnnotation(String des, boolean visible) {
+                                         if (des == 'Lcom/xishuang/annotation/AutoCount;') {
+                                             println "注解匹配：" + des
+                                             isAnnotation = true
+                                         }
+                                         return super.visitAnnotation(des, visible)
+                                     }
+                                 }
+                                 return adapter
+                         }
+                 ],
+                 [
+                         //方法的匹配，可以通过类名或者实现的接口名匹配
+                         'ClassName'    : 'com.mmc.lamandys.liba_datapick.Counter',
+                         'InterfaceName': '',
+                         'MethodName'   : 'test',
+                         'MethodDes'    : '()V',
+                         'isAnnotation' : false,
+                         //插入的字节码，方法的执行顺序visitAnnotation->onMethodEnter->onMethodExit
+                         'MethodVisitor': {
+                             MethodVisitor methodVisitor, int access, String name, String desc ->
+                                 MethodVisitor adapter = new AutoMethodVisitor(methodVisitor, access, name, desc) {
+
+                                     @Override
+                                     protected void onMethodEnter() {
+                                         super.onMethodEnter()
+                                     }
+
+                                     @Override
+                                     protected void onMethodExit(int opcode) {
+                                         super.onMethodExit(opcode)
+                                         // INVOKESTATIC
+                                         methodVisitor.visitMethodInsn(INVOKESTATIC, "com/mmc/lamandys/liba_datapick/AutoHelper", "onClick3", "()V", false)
+                                     }
+                                 }
+                                 return adapter
+                         }
+                 ],
+                 [
+                         //方法的匹配，可以通过类名或者实现的接口名匹配
+                         'ClassName'    : '',
+                         'InterfaceName': 'com.mmc.lamandys.liba_datapick.Counter3',
+                         'MethodName'   : 'count',
+                         'MethodDes'    : '()V',
+                         'isAnnotation' : false,
+                         //插入的字节码，方法的执行顺序visitAnnotation->onMethodEnter->onMethodExit
+                         'MethodVisitor': {
+                             MethodVisitor methodVisitor, int access, String name, String desc ->
+                                 MethodVisitor adapter = new AutoMethodVisitor(methodVisitor, access, name, desc) {
+
+                                     @Override
+                                     protected void onMethodEnter() {
+                                         super.onMethodEnter()
+                                     }
+
+                                     @Override
+                                     protected void onMethodExit(int opcode) {
+                                         super.onMethodExit(opcode)
+                                         // INVOKESTATIC
+                                         methodVisitor.visitMethodInsn(INVOKESTATIC, "com/mmc/lamandys/liba_datapick/AutoHelper", "onClick", "()V", false)
+                                     }
+                                 }
+                                 return adapter
+                         }
+                 ]
+    ]
+}
