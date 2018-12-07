@@ -44,16 +44,18 @@ Android字节码插件，编译期间动态修改代码
 ### 2、使用步骤
 
 要是使用演示的话，因为还没上传到jcenter库，所以只能本地仓库打包插件，记得要先把依赖都注释掉，插件打包完成后再启用，不然会编译不过去的。
+
 本地打包及使用步骤:
- 1、AndroidStudio右侧Gradle->:plugin->upload->uploadArchives,打包成功会在项目目录snapshotRepo中
- 2、根build.gradle添加插件
+- 2.1、AndroidStudio右侧Gradle->:plugin->upload->uploadArchives,打包成功会在项目目录snapshotRepo中
+- 2.2、根build.gradle添加插件
  ```
  dependencies {
      classpath 'oms.mmc:autotrack-gradle-plugin:1.0.0-SNAPSHOT'
  }
+ ```
+- 3、app的build.gradle中进行配置
 
  ```
- 3、app的build.gradle中进行配置
  apply plugin: 'oms.mmc.autotrack'
 
  xiaoqingwa {
@@ -131,7 +133,3 @@ Android字节码插件，编译期间动态修改代码
      ]
  }
  ```
-
-
-
-
