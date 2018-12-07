@@ -5,7 +5,7 @@ Android字节码插件，编译期间动态修改代码
 ### 1、更新日志
 
 ###### 2018.12.07更新
-参考神策的全埋点日志SDK,进行功能重构扩展完善,以方便正式应用到线上应用,近期会接到应用中进行持续优化
+参考神策的全埋点日志SDK,进行功能重构扩展完善,以方便正式应用到线上应用
 
 1、针对日志采集的全埋点对各个常见十多种控件进行埋点监听及处理(AutoTrackHelper类)
 - onFragmentViewCreated
@@ -53,7 +53,7 @@ Android字节码插件，编译期间动态修改代码
      classpath 'oms.mmc:autotrack-gradle-plugin:1.0.0-SNAPSHOT'
  }
  ```
-- 2.3、app的build.gradle中进行配置
+- 3、app的build.gradle中进行配置
 
  ```
  apply plugin: 'oms.mmc.autotrack'
@@ -133,5 +133,15 @@ Android字节码插件，编译期间动态修改代码
      ]
  }
  ```
+
+
+ - 2.4、```Clean Project```打包应用
+
+ 在logapp->build->intermediates->transforms->AutoTrack->debug中可查看插桩后的类文件:![插桩类文件](https://github.com/JieYuShi/Luffy/blob/master/img/after_autotrack.png)
+
+ 具体编译的字节码可查看编译日志:![编译日志](https://github.com/JieYuShi/Luffy/blob/master/img/bulid_log.png)
+
+ 具体采集后的日志及处理可看应用日志:![应用日志](https://github.com/JieYuShi/Luffy/blob/master/img/app_log1.png)
+ ![应用日志规范后效果](https://github.com/JieYuShi/Luffy/blob/master/img/app_log2.png)
 
 
