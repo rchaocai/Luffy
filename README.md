@@ -2,45 +2,46 @@
 Android字节码插件，编译期间动态修改代码
 
 
+### 1、更新日志
 
-2018.12.07 参考神策的全埋点日志SDK,进行重构,应用到线上应用
-主要修改:
+###### 2018.12.07更新
+参考神策的全埋点日志SDK,进行功能重构扩展完善,以方便正式应用到线上应用
+
 1、针对日志采集的全埋点对各个常见十多种控件进行埋点监听及处理(AutoTrackHelper类)
--onFragmentViewCreated
--trackFragmentResume
--trackFragmentSetUserVisibleHint
--trackOnHiddenChanged
--trackFragmentAppViewScreen
--trackExpandableListViewOnGroupClick
--trackExpandableListViewOnChildClick
--trackListView
--trackTabHost
--trackTabLayoutSelected
--trackMenuItem
--trackRadioGroup
--trackDialog
--trackDrawerOpened
--trackDrawerClosed
--trackViewOnClick
--trackViewOnClick
+- onFragmentViewCreated
+- trackFragmentResume
+- trackFragmentSetUserVisibleHint
+- trackOnHiddenChanged
+- trackFragmentAppViewScreen
+- trackExpandableListViewOnGroupClick
+- trackExpandableListViewOnChildClick
+- trackListView
+- trackTabHost
+- trackTabLayoutSelected
+- trackMenuItem
+- trackRadioGroup
+- trackDialog
+- trackDrawerOpened
+- trackDrawerClosed
+- trackViewOnClick
+- trackViewOnClick
 
 2、可以在build.gradle进行多个自定义插桩配置
+
 3、针对埋点控件及自定义配置功能的logapp测试应用
 
 
+###### 2018.03.28更新
+插件扩展，新增自动埋点实战功能
+2018.03.28更新 插件扩展，新增自动埋点实战功能
+- View的onClick(View v)方法
+- Fragment的onResume()方法
+- Fragment的onPause()方法
+- Fragment的setUserVisibleHint(boolean b)方法
+- Fragment的onHiddenChanged(boolean b)方法
+- 在app的module中手动设置的监听条件：指定方法或注解方法
 
-
-2018.03.28 插件扩展，新增自动埋点实战功能
-针对以下的方法进行埋点监听，并实现了View的唯一区别链
-- 1、View的onClick(View v)方法
-- 2、Fragment的onResume()方法
-- 3、Fragment的onPause()方法
-- 4、Fragment的setUserVisibleHint(boolean b)方法
-- 5、Fragment的onHiddenChanged(boolean b)方法
-- 6、在app的module中手动设置的监听条件：指定方法或注解方法
-
-
-
+### 2、使用步骤
 
 要是使用演示的话，因为还没上传到jcenter库，所以只能本地仓库打包插件，记得要先把依赖都注释掉，插件打包完成后再启用，不然会编译不过去的。
 本地打包及使用步骤:
