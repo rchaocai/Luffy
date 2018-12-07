@@ -11,9 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.mmc.lamandys.liba_datapick.MyItemRecyclerViewAdapter;
 import com.mmc.lamandys.liba_datapick.R;
+import com.mmc.lamandys.liba_datapick.adapter.MyItemRecyclerViewAdapter;
 import com.mmc.lamandys.liba_datapick.dummy.DummyContent;
+
 
 public class ItemFragment extends Fragment {
 

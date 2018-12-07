@@ -1,40 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/我是根布局"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/test"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="Hello World!" />
-    <LinearLayout
-        android:id="@+id/我是中文"
+    <Button
+        android:id="@+id/jumpButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Tab"
+        android:textAllCaps="false"
+        android:visibility="visible" />
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_marginTop="100dp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="我是按钮"/>
+    <Button
+        android:id="@+id/tabButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="List"
+        android:visibility="visible" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_marginTop="100dp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="我是按钮"/>
+    <Button
+        android:id="@+id/toolbarBotton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Toobar"
+        android:visibility="visible" />
 
-        <Button
-            android:id="@+id/main_go"
-            android:layout_marginTop="100dp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="跳转"/>
-    </LinearLayout>
+    <Button
+        android:id="@+id/radioBotton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Radio"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/drawerBotton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Drawer"
+        android:visibility="visible" />
 
 
-</FrameLayout>
+
+</LinearLayout>

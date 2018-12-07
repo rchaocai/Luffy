@@ -7,10 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mmc.lamandys.liba_datapick.R;
 import com.mmc.lamandys.liba_datapick.dummy.DummyContent;
@@ -18,10 +20,11 @@ import com.mmc.lamandys.liba_datapick.dummy.DummyContent;
 import java.util.List;
 
 
-public class ListItemFragment extends Fragment {
+public class ListItemFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
 
     private static final String ARG_CONTENT = "content";
     private String mContent;
+    private Context context;
 
     public ListItemFragment() {
     }
@@ -44,6 +47,12 @@ public class ListItemFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_item_list, container, false);
@@ -56,6 +65,23 @@ public class ListItemFragment extends Fragment {
         button.setText(mContent);
         ListView listView = (ListView) view.findViewById(R.id.list);
         listView.setAdapter(new ListAdapter(getActivity(), DummyContent.ITEMS));
+        listView.setOnItemClickListener(this);
+        listView.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        Toast.makeText(context, "单独点击" + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        Toast.makeText(context, "选择" + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     class ListAdapter extends BaseAdapter {
@@ -105,12 +131,12 @@ public class ListItemFragment extends Fragment {
                 holder.numberTv.setText(dummyItemLists.get(position).id);
                 holder.contentTv.setText(dummyItemLists.get(position).content);
             }
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
+//            convertView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(context, "单独点击", Toast.LENGTH_SHORT).show();
+//                }
+//            });
             return convertView;
         }
 

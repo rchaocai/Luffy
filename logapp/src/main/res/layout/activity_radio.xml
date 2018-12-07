@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_radio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="RadioGroup调试"
+        android:textSize="17sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_sex"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/tv_radio"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="性别："
+            android:textSize="15sp" />
+
+        <RadioGroup
+            android:id="@+id/sex"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/nan"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="true"
+                android:gravity="center"
+                android:text="男" />
+
+            <RadioButton
+                android:id="@+id/nv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="false"
+                android:text="女" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_ball"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/ll_sex"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="爱好："
+            android:textSize="15sp" />
+
+        <RadioGroup
+            android:id="@+id/hobby"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/basketball"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="true"
+                android:gravity="center"
+                android:text="篮球" />
+
+            <RadioButton
+                android:id="@+id/table_tenis"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="false"
+                android:text="乒乓球" />
+
+            <RadioButton
+                android:id="@+id/badminton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="false"
+                android:text="羽毛球" />
+        </RadioGroup>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_compound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_ball"
+        android:layout_marginTop="20dp"
+        android:text="CompoundButton调试"
+        android:textSize="17sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_compound"
+        android:layout_marginTop="10dp">
+
+        <CheckBox
+            android:id="@+id/eatId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="吃饭" />
+
+        <CheckBox
+            android:id="@+id/sleepId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="睡觉" />
+
+        <CheckBox
+            android:id="@+id/dotaId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="dota" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_ratingbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_checkbox"
+        android:layout_marginTop="20dp"
+        android:text="CompoundButton调试"
+        android:textSize="17sp" />
+
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_ratingbar"
+        android:layout_gravity="center_horizontal"
+        android:max="255"
+        android:numStars="5"
+        android:progress="255"
+        android:stepSize="0.5" />
+
+
+    <TextView
+        android:id="@+id/tv_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ratingBar"
+        android:layout_marginTop="20dp"
+        android:text="SeekBar调试"
+        android:textSize="17sp" />
+
+
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_seekbar"
+        android:progress="50" />
+
+
+</RelativeLayout>

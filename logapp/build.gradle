@@ -1,15 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.mmc.sample"
-        minSdkVersion 14
-        targetSdkVersion 23
+        minSdkVersion 21
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
     }
 
     lintOptions {
@@ -29,9 +30,12 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':annotation')
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:25.4.0'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.4.0'
+    compile 'com.android.support:appcompat-v7:26.0.1'
+    compile 'com.android.support:support-v4:26.0.1'
+    compile 'com.android.support:design:26.0.1'
+    compile 'com.android.support:recyclerview-v7:26.0.1'
+    compile 'com.android.support:cardview-v7:26.0.1'
+    compile 'com.android.support:support-vector-drawable:26.0.1'
 }
 
 apply plugin: 'oms.mmc.autotrack'
@@ -44,7 +48,7 @@ xiaoqingwa {
     // 是否打印日志
     isDebug = true
     // 是否打开SDK的日志全埋点采集
-    isOpenLogTrack = false
+    isOpenLogTrack = true
     // 支持自定义配置,可选
     matchData = [[
                          //方法的匹配，可以通过类名或者实现的接口名匹配

@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Demo</string>
+    <string name="menu_search">搜索</string>
+    <string name="notifica">通知</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_drawer">DrawerActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+
+    <item name="auto_track_tag_view_value" type="id" />
+    <item name="auto_track_tag_view_id" type="id" />
+    <item name="auto_track_tag_view_ignored" type="id" />
+    <item name="auto_track_tag_view_properties" type="id" />
+    <item name="auto_track_tag_view_onclick_timestamp" type="id" />
+    <item name="auto_track_tag_view_fragment_name" type="id" />
+    <item name="auto_track_tag_view_activity" type="id" />
 </resources>

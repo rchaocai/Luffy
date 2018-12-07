@@ -26,14 +26,18 @@ dependencies {
 
 // 本地调试
 def groupId = 'oms.mmc'
-def version = '1.0.1'
+version = '1.0.0'
 def artifactId = 'autotrack-gradle-plugin'
+//是否提交到仓库
+def uploadDataGatherSdk = true
+//是否为正式版
+def release = false
 
+// 上传本地maven库
 uploadArchives {
-    version = version + '-SNAPSHOT'//if you are testing the demo I provide locally, you can uncomment this.
+    version = version + '-SNAPSHOT'
     repositories {
         mavenDeployer {
-//            repository(url: uri('../repo'))
             snapshotRepository(url: uri('../snapshotRepo'))
             pom.groupId = groupId
             pom.artifactId = artifactId
@@ -42,19 +46,11 @@ uploadArchives {
     }
 }
 
-
-
-////是否提交到仓库
-//def uploadDataGatherSdk = true
-////是否为正式版
-//def release = false
-//version = '1.0.0'
-//
-////提交到服务器
+// 提交到服务器maven库
 //if (uploadDataGatherSdk) {
 //    apply plugin: 'maven'
 //
-//    group = 'oms.mmc'
+//    group = groupId
 //    version = !release ? version + '-SNAPSHOT' : version
 //
 //    task sourceJar(type: Jar) {
@@ -68,9 +64,6 @@ uploadArchives {
 //    }
 //
 //    artifacts {
-//        //当前aar 文件名
-////        archives file('liba_autotrack.aar')
-////        archives androidSourcesJar
 //        archives jar
 //        archives sourceJar
 //        archives javadocJar
@@ -80,14 +73,14 @@ uploadArchives {
 //    uploadArchives {
 //
 //        repositories.mavenDeployer {
-//            println "upload dataGather version:" + version
+//            println "upload gradle plugin version:" + version
 //            repository(url: MAVEN_R_URL) {
 //                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
 //            }
 //            snapshotRepository(url: MAVEN_S_URL) {
 //                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
 //            }
-//            pom.artifactId = "autotrack"
+//            pom.artifactId = artifactId
 //        }
 //    }
 //}

@@ -35,8 +35,8 @@ public class LogMethodVisitor extends AdviceAdapter {
         Logger.info("||开始扫描方法：${Logger.accCode2String(access)} ${methodName}${desc}")
     }
 
-    boolean isSensorsDataTrackViewOnClickAnnotation = false
-    boolean isSensorsDataIgnoreTrackOnClick = false
+    boolean isAutoTrackViewOnClickAnnotation = false
+    boolean isAutoTrackIgnoreTrackOnClick = false
     boolean isHasInstrumented = false
     boolean isHasTracked = false
 
@@ -54,7 +54,7 @@ public class LogMethodVisitor extends AdviceAdapter {
     protected void onMethodEnter() {
         super.onMethodEnter()
 
-        if (isSensorsDataIgnoreTrackOnClick) {
+        if (isAutoTrackIgnoreTrackOnClick) {
             return
         }
 
@@ -153,7 +153,7 @@ public class LogMethodVisitor extends AdviceAdapter {
             return
         }
 
-        if (isSensorsDataTrackViewOnClickAnnotation) {
+        if (isAutoTrackViewOnClickAnnotation) {
             if (methodDesc == '(Landroid/view/View;)V') {
                 methodVisitor.visitVarInsn(ALOAD, 1)
                 methodVisitor.visitMethodInsn(INVOKESTATIC, LogHookConfig.LOG_ANALYTICS_BASE, "trackViewOnClick", "(Landroid/view/View;)V", false)
@@ -192,12 +192,12 @@ public class LogMethodVisitor extends AdviceAdapter {
     @Override
     AnnotationVisitor visitAnnotation(String s, boolean b) {
         if (s == 'Lcom/mmc/lamandys/liba_datapick/AutoTrackDataViewOnClick;') {
-            isSensorsDataTrackViewOnClickAnnotation = true
+            isAutoTrackViewOnClickAnnotation = true
             Logger.info("||发现 ${methodName}${methodDesc} 有注解 @AutoTrackDataViewOnClick")
         }
 
         if (s == 'Lcom/mmc/lamandys/liba_datapick/AutoIgnoreTrackDataOnClick;') {
-            isSensorsDataIgnoreTrackOnClick = true
+            isAutoTrackIgnoreTrackOnClick = true
             Logger.info("||发现 ${methodName}${methodDesc} 有注解 @AutoIgnoreTrackDataOnClick")
         }
 
