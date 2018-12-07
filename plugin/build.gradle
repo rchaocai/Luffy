@@ -26,7 +26,7 @@ dependencies {
 
 // 本地调试
 def groupId = 'oms.mmc'
-version = '1.0.0'
+version = '1.0.2'
 def artifactId = 'autotrack-gradle-plugin'
 //是否提交到仓库
 def uploadDataGatherSdk = true
