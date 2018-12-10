@@ -27,15 +27,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':annotation')
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:appcompat-v7:26.0.1'
-    compile 'com.android.support:support-v4:26.0.1'
-    compile 'com.android.support:design:26.0.1'
-    compile 'com.android.support:recyclerview-v7:26.0.1'
-    compile 'com.android.support:cardview-v7:26.0.1'
-    compile 'com.android.support:support-vector-drawable:26.0.1'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':annotation')
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:appcompat-v7:26.0.1'
+    implementation 'com.android.support:support-v4:26.0.1'
+    implementation 'com.android.support:design:26.0.1'
+    implementation 'com.android.support:recyclerview-v7:26.0.1'
+    implementation 'com.android.support:cardview-v7:26.0.1'
+    implementation 'com.android.support:support-vector-drawable:26.0.1'
 }
 
 apply plugin: 'oms.mmc.autotrack'
@@ -49,6 +49,10 @@ xiaoqingwa {
     isDebug = true
     // 是否打开SDK的日志全埋点采集
     isOpenLogTrack = true
+    // 因为默认系统包[android.support, androidx]是被过滤掉的,想对默认过滤掉的类插桩的话可以手动添加包名,但是不建议对系统类进行插桩,容易出现不可预期错误
+    include = ["android.support.v7.widget"]
+    // 手动过滤指定的包,不对其进行字节码插桩
+    exclude = ["com.mmc.lamandys.liba_datapick.adapter"]
     // 支持自定义配置,可选
     matchData = [[
                          //方法的匹配，可以通过类名或者实现的接口名匹配
@@ -127,9 +131,9 @@ xiaoqingwa {
                  ],
                  [
                          //方法的匹配，可以通过类名或者实现的接口名匹配
-                         'ClassName'    : '',
+                         'ClassName'    : 'android.support.v7.widget.RecyclerView',
                          'InterfaceName': 'com.mmc.lamandys.liba_datapick.Counter3',
-                         'MethodName'   : 'count',
+                         'MethodName'   : 'clearOnChildAttachStateChangeListeners',
                          'MethodDes'    : '()V',
                          'isAnnotation' : false,
                          //插入的字节码，方法的执行顺序visitAnnotation->onMethodEnter->onMethodExit

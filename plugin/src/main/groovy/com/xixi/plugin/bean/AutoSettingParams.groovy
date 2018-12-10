@@ -18,4 +18,12 @@ public class AutoSettingParams {
      * 用户自定义功能
      */
     List<Map<String, Object>> matchData = [[:]]
+    /**
+     * 需要手动过滤的包
+     */
+    List<String> exclude = []
+    /**
+     * 需要手动添加的包
+     */
+    List<String> include = []
 }

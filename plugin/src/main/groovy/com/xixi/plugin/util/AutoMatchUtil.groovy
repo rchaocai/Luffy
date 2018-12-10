@@ -1,9 +1,8 @@
 package com.xixi.plugin.util
 
+import com.xixi.plugin.GlobalConfig
 import com.xixi.plugin.bean.AutoClassFilter
 
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 /**
  * Author :xishuang
@@ -18,16 +17,16 @@ public class AutoMatchUtil {
      * @param className 扫描到的类名
      * @param exclude 过滤掉的类
      */
-    static boolean isShouldModifyClass(String className, HashSet<String> exclude) {
+    static boolean isShouldModifyClass(String className) {
         if (className.contains('R$') ||
                 className.contains('R2$') ||
-                className.contains('R.class') ||
-                className.contains('R2.class') ||
-                className.contains('BuildConfig.class')) {
+                className.endsWith('R') ||
+                className.endsWith('R2') ||
+                className.endsWith('BuildConfig')) {
             return false
         }
 
-        HashSet<String> include = null
+        HashSet<String> include = GlobalConfig.include
         if (include != null && !include.isEmpty()) {
             Iterator<String> iterator = include.iterator()
             while (iterator.hasNext()) {
@@ -39,7 +38,7 @@ public class AutoMatchUtil {
             }
             return false
         } else {
-            Iterator<String> iterator = exclude.iterator()
+            Iterator<String> iterator = GlobalConfig.exclude.iterator()
             while (iterator.hasNext()) {
                 String packageName = iterator.next()
                 if (className.startsWith(packageName)) {

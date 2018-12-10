@@ -25,11 +25,7 @@ import java.util.zip.ZipEntry
  */
 public class AutoTransform extends Transform {
 
-    private
-    static HashSet<String> exclude = ['android.support', 'androidx']
-//    static HashSet<String> exclude = ['com.mmc.lamandys.liba_datapick', 'android.support', 'androidx']
-
-    private static final String VERSION = "v1.0.0"
+    private static final String VERSION = "v1.0.2"
 
     @Override
     String getName() {
@@ -67,6 +63,8 @@ public class AutoTransform extends Transform {
         println '##########                                                    '
         println '##########                 -isDebug:' + GlobalConfig.getParams().isDebug
         println '##########                 -isOpenLogTrack:' + GlobalConfig.getParams().isOpenLogTrack
+        println '##########                 -exclude:' + GlobalConfig.exclude
+        println '##########                 -include:' + GlobalConfig.include
         List<AutoClassFilter> autoClassFilterList = GlobalConfig.getAutoClassFilter()
         autoClassFilterList.each {
             AutoClassFilter filter ->
@@ -91,6 +89,11 @@ public class AutoTransform extends Transform {
             @NonNull Collection<TransformInput> referencedInputs,
             @Nullable TransformOutputProvider outputProvider,
             boolean isIncremental) throws IOException, TransformException, InterruptedException {
+
+
+        if (!incremental) {
+            outputProvider.deleteAll()
+        }
 
         /**
          * 打印提示信息
@@ -210,7 +213,7 @@ public class AutoTransform extends Transform {
             if (entryName.endsWith(".class")) {
                 className = entryName.replace("/", ".").replace(".class", "")
 //                Logger.info("Jar:className:" + className)
-                if (AutoMatchUtil.isShouldModifyClass(className, exclude)) {
+                if (AutoMatchUtil.isShouldModifyClass(className)) {
                     modifiedClassBytes = AutoModify.modifyClasses(className, sourceClassBytes)
                 }
             }
@@ -234,8 +237,8 @@ public class AutoTransform extends Transform {
         FileOutputStream outputStream = null
         try {
             String className = AutoTextUtil.path2ClassName(classFile.absolutePath.replace(dir.absolutePath + File.separator, ""))
-//            Logger.info("File:className:" + className)
-            if (AutoMatchUtil.isShouldModifyClass(className, exclude)) {
+            Logger.info("File:className:" + className)
+            if (AutoMatchUtil.isShouldModifyClass(className)) {
                 byte[] sourceClassBytes = IOUtils.toByteArray(new FileInputStream(classFile))
                 byte[] modifiedClassBytes = AutoModify.modifyClasses(className, sourceClassBytes)
                 if (modifiedClassBytes) {
