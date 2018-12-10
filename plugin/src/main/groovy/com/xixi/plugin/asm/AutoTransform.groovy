@@ -74,7 +74,6 @@ public class AutoTransform extends Transform {
                 println '##########                 -className:' + filter.ClassName
                 println '##########                 -interfaceName:' + filter.InterfaceName
                 println '##########                 -isAnnotation:' + filter.isAnnotation
-                println '##########                                                    '
         }
         println '##########                                                    '
         println '##########                                                    '

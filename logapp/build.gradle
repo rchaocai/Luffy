@@ -45,15 +45,15 @@ import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.MethodVisitor
 
 xiaoqingwa {
-    // 是否打印日志
+    // 是否打印日志,可选,默认false
     isDebug = true
-    // 是否打开SDK的日志全埋点采集
+    // 是否打开SDK的日志全埋点采集,可选,默认true
     isOpenLogTrack = true
-    // 因为默认系统包[android.support, androidx]是被过滤掉的,想对默认过滤掉的类插桩的话可以手动添加包名,但是不建议对系统类进行插桩,容易出现不可预期错误
+    // 因为默认系统包[android.support, androidx]是被过滤掉的,想对默认过滤掉的类插桩的话可以手动添加包名,但是不建议对系统类进行插桩,容易出现不可预期错误,可选,默认空
     include = ["android.support.v7.widget"]
-    // 手动过滤指定的包,不对其进行字节码插桩
-    exclude = ["com.mmc.lamandys.liba_datapick.adapter"]
-    // 支持自定义配置,可选
+    // [android.support, androidx]默认过滤，可手动追加过滤的包,可选,默认空不追加
+    exclude = []
+    // 支持自定义配置,可选,默认空
     matchData = [[
                          //方法的匹配，可以通过类名或者实现的接口名匹配
                          'ClassName'    : 'com.mmc.lamandys.liba_datapick.Counter2',

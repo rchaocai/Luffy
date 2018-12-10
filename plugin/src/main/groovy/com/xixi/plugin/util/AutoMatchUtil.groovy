@@ -26,27 +26,28 @@ public class AutoMatchUtil {
             return false
         }
 
-        HashSet<String> include = GlobalConfig.include
-        if (include != null && !include.isEmpty()) {
-            Iterator<String> iterator = include.iterator()
-            while (iterator.hasNext()) {
-                String packageName = iterator.next()
+        // 1、用户自定义的优先通过
+        Iterator<String> includeIterator = GlobalConfig.include.iterator()
+        while (includeIterator.hasNext()) {
+            String packageName = includeIterator.next()
 
-                if (className.startsWith(packageName)) {
-                    return true
-                }
+            if (className.startsWith(packageName)) {
+                return true
             }
-            return false
-        } else {
-            Iterator<String> iterator = GlobalConfig.exclude.iterator()
-            while (iterator.hasNext()) {
-                String packageName = iterator.next()
-                if (className.startsWith(packageName)) {
-                    return false
-                }
-            }
-            return true
         }
+
+        // 2、不允许通过的包，包括用户自定义的
+        Iterator<String> iterator = GlobalConfig.exclude.iterator()
+        while (iterator.hasNext()) {
+            String packageName = iterator.next()
+            if (className.startsWith(packageName)) {
+                return false
+            }
+        }
+
+
+        return true
+
     }
 
     /**
