@@ -495,19 +495,54 @@ public class AutoTrackHelper {
             if (isDeBounceTrack(tab)) {
                 return;
             }
-//            System.out.println("自动埋点:" + object.getClass().getCanonicalName());
-//            System.out.println("自动埋点:" + tab.getClass().getCanonicalName());
 
             JSONObject properties = new JSONObject();
+            Context context = null;
 
-            // 1、反射获取tab的文本内容
-            Object text = ReflectUtil.getMethodValue(tab, "getText");
+            if (!(tab instanceof TabLayout.Tab)) {
+                return;
+            }
+
+            // 1、获取当前控件内容
+            TabLayout.Tab tabObject = (TabLayout.Tab) tab;
+//            Object text = ReflectUtil.getMethodValue(tab, "getText");
+            Object text = tabObject.getText();
             if (text != null) {
                 properties.put(LogConstants.Autotrack.ELEMENT_CONTENT, text);
+            } else {
+                // 获取自定义view文本内容
+//                Object customViewObject = ReflectUtil.getMethodValue(tab, "getCustomView");
+                View customView = tabObject.getCustomView();
+                if (customView != null) {
+                    try {
+                        String viewText;
+                        if (customView instanceof ViewGroup) {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            viewText = AutoTrackUtil.traverseView(stringBuilder, (ViewGroup) customView);
+                            if (!TextUtils.isEmpty(viewText)) {
+                                viewText = viewText.substring(0, viewText.length() - 1);
+                                properties.put(LogConstants.Autotrack.ELEMENT_CONTENT, viewText);
+                            }
+                        } else {
+                            CharSequence viewTextOnly = AutoTrackUtil.traverseViewOnly(customView);
+                            if (!TextUtils.isEmpty(viewTextOnly)) {
+                                properties.put(LogConstants.Autotrack.ELEMENT_CONTENT, viewTextOnly.toString());
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (!(object instanceof Context)) {
+                        context = customView.getContext();
+                    }
+                }
+
+
             }
 
             // 2、获取Activity
-            Context context = null;
             if (object instanceof Context) {
                 context = (Context) object;
             } else {

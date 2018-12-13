@@ -34,53 +34,53 @@ def uploadDataGatherSdk = true
 def release = false
 
 // 上传本地maven库
-uploadArchives {
-    version = version + '-SNAPSHOT'
-    repositories {
-        mavenDeployer {
-            snapshotRepository(url: uri('../snapshotRepo'))
-            pom.groupId = groupId
-            pom.artifactId = artifactId
-            pom.version = version
-        }
-    }
-}
-
-// 提交到服务器maven库
-//if (uploadDataGatherSdk) {
-//    apply plugin: 'maven'
-//
-//    group = groupId
-//    version = !release ? version + '-SNAPSHOT' : version
-//
-//    task sourceJar(type: Jar) {
-//        classifier = 'sources'
-//        from sourceSets.main.allSource
-//    }
-//
-//    task javadocJar(type: Jar, dependsOn: javadoc) {
-//        classifier = 'javadoc'
-//        from javadoc.destinationDir
-//    }
-//
-//    artifacts {
-//        archives jar
-//        archives sourceJar
-//        archives javadocJar
-//    }
-//
-//
-//    uploadArchives {
-//
-//        repositories.mavenDeployer {
-//            println "upload gradle plugin version:" + version
-//            repository(url: MAVEN_R_URL) {
-//                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
-//            }
-//            snapshotRepository(url: MAVEN_S_URL) {
-//                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
-//            }
+//uploadArchives {
+//    version = version + '-SNAPSHOT'
+//    repositories {
+//        mavenDeployer {
+//            snapshotRepository(url: uri('../snapshotRepo'))
+//            pom.groupId = groupId
 //            pom.artifactId = artifactId
+//            pom.version = version
 //        }
 //    }
 //}
+
+// 提交到服务器maven库
+if (uploadDataGatherSdk) {
+    apply plugin: 'maven'
+
+    group = groupId
+    version = !release ? version + '-SNAPSHOT' : version
+
+    task sourceJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives jar
+        archives sourceJar
+        archives javadocJar
+    }
+
+
+    uploadArchives {
+
+        repositories.mavenDeployer {
+            println "upload gradle plugin version:" + version
+            repository(url: MAVEN_R_URL) {
+                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
+            }
+            snapshotRepository(url: MAVEN_S_URL) {
+                authentication(userName: MAVEN_D_USERNAME, password: MAVEN_D_PASSWORD)
+            }
+            pom.artifactId = artifactId
+        }
+    }
+}

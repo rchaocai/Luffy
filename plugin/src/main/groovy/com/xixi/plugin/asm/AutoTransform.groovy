@@ -236,7 +236,7 @@ public class AutoTransform extends Transform {
         FileOutputStream outputStream = null
         try {
             String className = AutoTextUtil.path2ClassName(classFile.absolutePath.replace(dir.absolutePath + File.separator, ""))
-            Logger.info("File:className:" + className)
+//            Logger.info("File:className:" + className)
             if (AutoMatchUtil.isShouldModifyClass(className)) {
                 byte[] sourceClassBytes = IOUtils.toByteArray(new FileInputStream(classFile))
                 byte[] modifiedClassBytes = AutoModify.modifyClasses(className, sourceClassBytes)
