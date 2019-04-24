@@ -137,6 +137,29 @@ public class AutoTrackHelper {
         }
     }
 
+
+    /**
+     * 对应的埋点方法{@link android.support.v4.app.Fragment#onDestroy()}
+     *
+     * @param object Fragment对象
+     */
+    public static void trackFragmentDestroy(Object object) {
+
+        try {
+
+            if (!(object instanceof android.support.v4.app.Fragment)) {
+                return;
+            }
+
+            android.support.v4.app.Fragment fragment = (android.support.v4.app.Fragment) object;
+            String fragmengName = fragment.getClass().getCanonicalName();
+            System.out.println("测试:" + fragmengName);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 对应的埋点方法{@link android.support.v4.app.Fragment#setUserVisibleHint(boolean)}
      *
@@ -203,6 +226,16 @@ public class AutoTrackHelper {
                 }
             }
         }
+    }
+
+    /**
+     * 对应实现接口的埋点方法{@link android.support.v4.view.ViewPager.OnPageChangeListener#onPageSelected(int)}
+     *
+     * @param object   this对象
+     * @param position 参数选择索引
+     */
+    public static void trackViewPageSelected(Object object, int position) {
+
     }
 
 

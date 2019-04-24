@@ -6,7 +6,6 @@ import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
 import com.xixi.plugin.GlobalConfig
 import com.xixi.plugin.util.AutoMatchUtil
-import com.xixi.plugin.util.LogAnalyticsUtil
 import com.xixi.plugin.bean.AutoClassFilter
 import com.xixi.plugin.util.AutoTextUtil
 import com.xixi.plugin.util.Logger
@@ -25,7 +24,7 @@ import java.util.zip.ZipEntry
  */
 public class AutoTransform extends Transform {
 
-    private static final String VERSION = "v1.0.2"
+    private static final String VERSION = "v1.0.3"
 
     @Override
     String getName() {

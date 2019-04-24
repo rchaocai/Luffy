@@ -125,6 +125,15 @@ public class LogHookConfig {
                 0, 2,
                 [Opcodes.ALOAD, Opcodes.ALOAD]))
 
+//        sInterfaceMethods.put('onPageSelected(I)V', new LogMethodCell(
+//                'onPageSelected',
+//                '(I)V',
+//                'android/support/v4/view/ViewPager$OnPageChangeListener',
+//                'trackViewPageSelected',
+//                '(Ljava/lang/Object;I)V',
+//                0, 2,
+//                [Opcodes.ALOAD, Opcodes.ALOAD]))
+
         // Todo: 扩展
     }
 
@@ -166,6 +175,14 @@ public class LogHookConfig {
                 '(Ljava/lang/Object;Landroid/view/View;Landroid/os/Bundle;)V',
                 0, 3,
                 [Opcodes.ALOAD, Opcodes.ALOAD, Opcodes.ALOAD]))
+        sFragmentMethods.put('onDestroy()V', new LogMethodCell(
+                'onDestroy',
+                '()V',
+                '',// parent省略，均为 android/app/Fragment 或 android/support/v4/app/Fragment
+                'trackFragmentDestroy',
+                '(Ljava/lang/Object;)V',
+                0, 1,
+                [Opcodes.ALOAD]))
     }
 
     /**

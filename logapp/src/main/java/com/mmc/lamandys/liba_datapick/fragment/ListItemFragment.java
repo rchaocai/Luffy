@@ -167,4 +167,11 @@ public class ListItemFragment extends Fragment implements AdapterView.OnItemClic
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
     }
+
+    @Override
+    public void onDestroy() {
+        System.out.print("哈哈哈");
+        super.onDestroy();
+        System.out.print("哈哈哈");
+    }
 }

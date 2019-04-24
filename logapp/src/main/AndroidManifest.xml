@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mmc.lamandys.liba_datapick">
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -12,7 +13,8 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".activity.MainActivity"
             android:label="主页面">
@@ -38,6 +40,9 @@
         <activity
             android:name=".activity.DrawerActivity"
             android:label="@string/title_activity_drawer" />
+        <activity
+            android:name=".activity.Tab2Activity"
+            android:theme="@style/Theme.AppCompat" />
     </application>
 
 </manifest>

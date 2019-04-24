@@ -22,11 +22,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
         jumpButton = findViewById(R.id.jumpButton);
+//        jumpButton.setOnClickListener(this::onClickLike);
+        jumpButton.setOnClickListener(view -> onClickLike(view));
         findViewById(R.id.jumpButton).setOnClickListener(this);
         findViewById(R.id.tabButton).setOnClickListener(this);
         findViewById(R.id.toolbarBotton).setOnClickListener(this);
         findViewById(R.id.radioBotton).setOnClickListener(this);
         findViewById(R.id.drawerBotton).setOnClickListener(this);
+    }
+
+    private void onClickLike(View v) {
     }
 
     @Override
@@ -35,7 +40,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             startActivity(new Intent(this, SecondActivity.class));
             System.out.println("自动埋点:" + AutoTrackUtil.traverseViewOnly(jumpButton));
         } else if (v.getId() == R.id.tabButton) {
-            startActivity(new Intent(this, TabActivity.class));
+            startActivity(new Intent(this, Tab2Activity.class));
         } else if (v.getId() == R.id.toolbarBotton) {
             startActivity(new Intent(this, ToolBarActivity.class));
         } else if (v.getId() == R.id.radioBotton) {

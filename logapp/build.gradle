@@ -24,6 +24,10 @@ android {
         }
     }
 
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -107,7 +111,7 @@ xiaoqingwa {
                          'ClassName'    : 'com.mmc.lamandys.liba_datapick.Counter',
                          'InterfaceName': '',
                          'MethodName'   : 'test',
-                         'MethodDes'    : '()V',
+                         'MethodDes'    : '()I',
                          'isAnnotation' : false,
                          //插入的字节码，方法的执行顺序visitAnnotation->onMethodEnter->onMethodExit
                          'MethodVisitor': {

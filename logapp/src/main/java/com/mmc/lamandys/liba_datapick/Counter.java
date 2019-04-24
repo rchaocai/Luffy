@@ -10,6 +10,10 @@ import com.xishuang.annotation.AutoCount;
 
 public class Counter {
 
-    public void test() throws InterruptedException {
+    public int test() throws InterruptedException {
+
+        int digit = 1;
+        return digit;
+
     }
 }
